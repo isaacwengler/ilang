@@ -1,4 +1,6 @@
-grammar ilang;
+parser grammar ilang_parser;
+
+options { tokenVocab=ilang_lexer; }
 
 start: block EOF;
 

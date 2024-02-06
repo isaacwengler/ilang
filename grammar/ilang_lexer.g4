@@ -1,4 +1,4 @@
-lexer grammar ilang;
+lexer grammar ilang_lexer;
 
 fragment F_LETTER: [a-zA-Z];
 fragment F_NUMBER: [0-9];
