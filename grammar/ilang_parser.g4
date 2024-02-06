@@ -10,63 +10,63 @@ block: (
 )+;
 
 statement: (
-    let_assignment |
-    if_statement |
-    while_loop |
-    for_loop |
-    foreach_loop
+    letAssignment |
+    ifStatement |
+    whileLoop |
+    forLoop |
+    foreachLoop
 );
 
 expr: 
-    not #not_expr |
-    symbol #symbol_expr |
-    string_literal #string_expr |
-    int_literal #int_expr |
-    float_literal #float_expr |
-    null_literal #null_expr |
-    boolean_literal #boolean_expr |
-    grouping #grouping_expr |
-    function_def #function_def_expr |
+    not #notExpr |
+    symbol #symbolExpr |
+    stringLiteral #stringExpr |
+    intLiteral #intExpr |
+    floatLiteral #floatExpr |
+    nullLiteral #nullExpr |
+    booleanLiteral #booleanExpr |
+    grouping #groupingExpr |
+    functionDef #functionDefExpr |
     expr CONDITIONAL_OP expr #condition |
     expr ARITHMETIC_OP expr #arithmetic |
-    expr BOOLEAN_OP expr #boolean_algebra |
-    expr  function_args #function_call
+    expr BOOLEAN_OP expr #booleanAlgebra |
+    expr  functionArgs #functionCall
 ;
 
-function_def: FUNC function_args scope_body;
+functionDef: FUNC functionArgs scopeBody;
 
-function_args: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
+functionArgs: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
 
-let_assignment: LET SYMBOL EQUALS expr SEMICOLON;
+letAssignment: LET SYMBOL EQUALS expr SEMICOLON;
 
-if_statement: IF condition_body scope_body elseif_statement* else_statement?;
+ifStatement: IF conditionBody scopeBody elseifStatement* elseStatement?;
 
-while_loop: WHILE condition_body scope_body;
+whileLoop: WHILE conditionBody scopeBody;
 
-foreach_loop: FOR OPEN_PAREN SYMBOL IN expr CLOSE_PAREN scope_body;
+foreachLoop: FOR OPEN_PAREN SYMBOL IN expr CLOSE_PAREN scopeBody;
 
-for_loop: FOR OPEN_PAREN init=expr SEMICOLON cond=expr SEMICOLON step=expr CLOSE_PAREN scope_body;
+forLoop: FOR OPEN_PAREN init=expr SEMICOLON cond=expr SEMICOLON step=expr CLOSE_PAREN scopeBody;
 
-elseif_statement: ELSE IF condition_body scope_body;
+elseifStatement: ELSE IF conditionBody scopeBody;
 
-else_statement: ELSE scope_body;
+elseStatement: ELSE scopeBody;
 
-scope_body: OPEN_BRACE block CLOSE_BRACE;
+scopeBody: OPEN_BRACE block CLOSE_BRACE;
 
-condition_body: OPEN_PAREN expr CLOSE_PAREN;
+conditionBody: OPEN_PAREN expr CLOSE_PAREN;
 
 not: NOT expr;
 
 symbol: SYMBOL (DOT symbol)?;
 
-string_literal: STRING;
+stringLiteral: STRING;
 
-int_literal: INT;
+intLiteral: INT;
 
-float_literal: FLOAT;
+floatLiteral: FLOAT;
 
-null_literal: NULL;
+nullLiteral: NULL;
 
-boolean_literal: BOOLEAN_OP;
+booleanLiteral: BOOLEAN_OP;
 
 grouping: OPEN_PAREN expr CLOSE_PAREN;
