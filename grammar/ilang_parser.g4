@@ -67,6 +67,6 @@ floatLiteral: FLOAT;
 
 nullLiteral: NULL;
 
-booleanLiteral: BOOLEAN_OP;
+booleanLiteral: TRUE | FALSE;
 
 grouping: OPEN_PAREN expr CLOSE_PAREN;

@@ -9,18 +9,20 @@ import (
 )
 
 func main() {
-    logger.Debug("Starting ilang")
+	logger.Debug("Starting ilang")
 
-    input := "let hi = \"hello\";"
-    logger.Debug("input displayed below\n", input)
-    inputStream := antlr.NewInputStream(input)
+	input := "let hi = \"hello\";hi;"
+	logger.Debug("input displayed below\n", input)
+	inputStream := antlr.NewInputStream(input)
 
-    lexer := parser.Newilang_lexer(inputStream)
-    tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-    p := parser.Newilang_parser(tokenStream)
+	lexer := parser.Newilang_lexer(inputStream)
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	p := parser.Newilang_parser(tokenStream)
 
-    logger.Debug("Initialized lexer and parser")
-    logger.Debug("Parsing and visiting parse tree")
-    visitor := visitor.Visitor{}
-    visitor.Visit(p.Start_())
+	logger.Debug("Initialized lexer and parser")
+	logger.Debug("Parsing and visiting parse tree")
+	v := visitor.NewVisitor()
+
+    res := v.Visit(p.Start_())
+    logger.Debug("Result =", res)
 }
