@@ -8,4 +8,4 @@ antlr4 -Dlanguage=Go -no-listener -visitor ./ilang_parser.g4 -o ../generated
 cd ..
 
 # build go project
-go build -o ./build
+go build -o ./build/ilang
