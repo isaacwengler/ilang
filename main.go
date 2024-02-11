@@ -8,7 +8,9 @@ import (
 func main() {
 	logger.Debug("Starting ilang")
 
-	input := "let hi = -1;hi;"
+	input :=
+		`let var = 12;
+    var;`
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)
 	logger.Debug("Result =", res)
