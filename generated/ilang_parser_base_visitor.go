@@ -80,7 +80,7 @@ func (v *Baseilang_parserVisitor) VisitFunctionArgs(ctx *FunctionArgsContext) in
 	return v.VisitChildren(ctx)
 }
 
-func (v *Baseilang_parserVisitor) VisitLetAssignment(ctx *LetAssignmentContext) interface{} {
+func (v *Baseilang_parserVisitor) VisitAssignment(ctx *AssignmentContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

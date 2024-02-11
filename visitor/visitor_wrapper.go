@@ -2,6 +2,7 @@ package visitor
 
 import (
 	parser "ilang/generated"
+	"ilang/logger"
 	"ilang/types"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -21,6 +22,7 @@ import (
 func (v *Visitor) VisitWrapped(t antlr.ParseTree) types.WrappedValue {
 	val := v.Visit(t)
 	if val == nil {
+        logger.Warn("VisitWrapped got nil return value")
 		return nil
 	}
 	return val.(types.WrappedValue)
@@ -29,6 +31,7 @@ func (v *Visitor) VisitWrapped(t antlr.ParseTree) types.WrappedValue {
 func (v *Visitor) VisitChildrenWrapped(node antlr.RuleNode) types.WrappedValue {
 	val := v.VisitChildren(node)
 	if val == nil {
+        logger.Warn("VisitChildrenWrapped got nil return value")
 		return nil
 	}
 	return val.(types.WrappedValue)
@@ -124,8 +127,8 @@ func (v *Visitor) VisitFunctionArgs(ctx *parser.FunctionArgsContext) interface{}
 	return v.VisitFunctionArgsWrapped(ctx)
 }
 
-func (v *Visitor) VisitLetAssignment(ctx *parser.LetAssignmentContext) interface{} {
-	return v.VisitLetAssignmentWrapped(ctx)
+func (v *Visitor) VisitAssignment(ctx *parser.AssignmentContext) interface{} {
+	return v.VisitAssignmentWrapped(ctx)
 }
 
 func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {

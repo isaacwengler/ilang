@@ -62,8 +62,8 @@ type ilang_parserVisitor interface {
 	// Visit a parse tree produced by ilang_parser#functionArgs.
 	VisitFunctionArgs(ctx *FunctionArgsContext) interface{}
 
-	// Visit a parse tree produced by ilang_parser#letAssignment.
-	VisitLetAssignment(ctx *LetAssignmentContext) interface{}
+	// Visit a parse tree produced by ilang_parser#assignment.
+	VisitAssignment(ctx *AssignmentContext) interface{}
 
 	// Visit a parse tree produced by ilang_parser#ifStatement.
 	VisitIfStatement(ctx *IfStatementContext) interface{}

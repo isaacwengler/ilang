@@ -10,7 +10,7 @@ block: (
 )+;
 
 statement: (
-    letAssignment |
+    assignment |
     ifStatement |
     whileLoop |
     forLoop |
@@ -37,7 +37,7 @@ functionDef: FUNC functionArgs scopeBody;
 
 functionArgs: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
 
-letAssignment: LET SYMBOL EQUALS expr SEMICOLON;
+assignment: LET? SYMBOL EQUALS expr SEMICOLON;
 
 ifStatement: IF conditionBody scopeBody elseifStatement* elseStatement?;
 

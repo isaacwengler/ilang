@@ -34,6 +34,8 @@ TODO:
     - implemented by all primitives
 - ~~update current to use wrapped value~~
 - parse array and map
+- ~~parse and impl reassignments~~
+- parse and impl return
 - implement algebra, conds, boolean alg
 - implement control flow
 - implement function call

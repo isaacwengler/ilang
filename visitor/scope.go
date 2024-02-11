@@ -31,9 +31,23 @@ func (s *scope) resolveVariable(name string) types.WrappedValue {
 	}
 
 	if s.parentScope == nil {
-		err := errors.New("Undefined variable " + name)
+		err := errors.New("Undefined reference to variable '" + name + "'")
 		panic(err)
 	}
 
 	return s.parentScope.resolveVariable(name)
+}
+
+func (s *scope) reassignVariable(name string, val types.WrappedValue) {
+	_, ok := s.getVar(name)
+	if ok {
+		s.setVar(name, val)
+		return
+	}
+
+	if s.parentScope == nil {
+		err := errors.New("Attempting to reassign undefined variable '" + name + "'")
+		panic(err)
+	}
+	s.parentScope.reassignVariable(name, val)
 }

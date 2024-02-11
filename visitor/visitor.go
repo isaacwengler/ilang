@@ -109,12 +109,24 @@ func (v *Visitor) VisitFunctionArgsWrapped(ctx *parser.FunctionArgsContext) type
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitLetAssignmentWrapped(ctx *parser.LetAssignmentContext) types.WrappedValue {
-	logger.Debug("VisitLetAssignment", ctx.GetText())
+func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) types.WrappedValue {
+	logger.Debug("VisitAssignment", ctx.GetText())
+
+	isReassignment := ctx.LET() == nil
 	variable := ctx.SYMBOL().GetText()
 	value := v.VisitWrapped(ctx.Expr())
+
+	if isReassignment {
+		v.scope.reassignVariable(variable, value)
+		return value
+	}
+
+	_, isPresentInCurrentScope := v.scope.getVar(variable)
+	if isPresentInCurrentScope {
+		panic(errors.New("variable '" + variable + "' already defined in scope"))
+	}
 	v.scope.setVar(variable, value)
-	return nil
+	return value
 }
 
 func (v *Visitor) VisitIfStatementWrapped(ctx *parser.IfStatementContext) types.WrappedValue {
@@ -153,11 +165,11 @@ func (v *Visitor) VisitScopeBodyWrapped(ctx *parser.ScopeBodyContext) types.Wrap
 	logger.Debug("pushing new scope")
 	v.scope = newScope(v.scope)
 
-	v.VisitChildrenWrapped(ctx)
+    val := v.VisitChildrenWrapped(ctx)
 
 	logger.Debug("popping off scope")
 	v.scope = v.scope.parentScope
-	return nil
+	return val
 }
 
 func (v *Visitor) VisitConditionBodyWrapped(ctx *parser.ConditionBodyContext) types.WrappedValue {

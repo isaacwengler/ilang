@@ -81,10 +81,46 @@ func TestInvalidNot(t *testing.T) {
 	assertPanic(t, func() { RunIlang(input) })
 }
 
-func TestFakeValPanic(t *testing.T) {
+func TestUndefinedValPanic(t *testing.T) {
 	input := "var;"
 
 	assertPanic(t, func() { RunIlang(input) })
+}
+
+func TestReassigningUndefinedValPanic(t *testing.T) {
+	input := "var = 1;"
+
+	assertPanic(t, func() { RunIlang(input) })
+}
+
+func TestAssigningAlreadyDefinedValPanic(t *testing.T) {
+	input := `let hi = 22;
+    let hi = 1;
+    hi;`
+
+	assertPanic(t, func() { RunIlang(input) })
+}
+
+func TestReassigning(t *testing.T) {
+	input := `let hi = 22;
+    hi = 1;
+    hi;`
+
+	res := RunIlang(input).PrintValue()
+	if res != int64(1) {
+		t.Errorf("unable to reassign variable")
+	}
+}
+
+func TestReassigningNewType(t *testing.T) {
+	input := `let hi = 22;
+    hi = "hello";
+    hi;`
+
+	res := RunIlang(input).PrintValue()
+	if res != "hello" {
+		t.Errorf("unable to reassign variable to a new type")
+	}
 }
 
 func assertPanic(t *testing.T, f func()) {
