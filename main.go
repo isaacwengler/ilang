@@ -13,5 +13,5 @@ func main() {
     var;`
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)
-	logger.Debug("Result =", res)
+	logger.Debug("Result =", res.PrintValue())
 }

@@ -27,3 +27,13 @@ go run .
 # debug mode
 ./build/ilang -d
 ```
+
+TODO:
+- WrappedValue type
+    - has map children with child bindings
+    - implemented by all primitives
+- update current to use wrapped value
+- parse array and map
+- implement algebra, conds, boolean alg
+- implement control flow
+- standard functions on wrapped value

@@ -1,14 +1,15 @@
 package interpreter
 
 import (
-    parser "ilang/generated"
+	parser "ilang/generated"
 	"ilang/logger"
+	"ilang/types"
 	"ilang/visitor"
 
 	"github.com/antlr4-go/antlr/v4"
 )
 
-func RunIlang(input string) any {
+func RunIlang(input string) types.WrappedValue {
 	inputStream := antlr.NewInputStream(input)
 
 	lexer := parser.Newilang_lexer(inputStream)
@@ -19,5 +20,5 @@ func RunIlang(input string) any {
 	logger.Debug("Parsing and visiting parse tree")
 	v := visitor.NewVisitor()
 
-    return v.Visit(p.Start_())
+	return v.VisitWrapped(p.Start_())
 }
