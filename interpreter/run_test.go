@@ -4,6 +4,15 @@ import (
 	"testing"
 )
 
+func assertPanic(t *testing.T, f func()) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	f()
+}
+
 func TestStringAssign(t *testing.T) {
 	input := `let var = "expected";
     var;`
@@ -123,11 +132,31 @@ func TestReassigningNewType(t *testing.T) {
 	}
 }
 
-func assertPanic(t *testing.T, f func()) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("The code did not panic")
-		}
-	}()
-	f()
+func TestReturn(t *testing.T) {
+	input := `return "hello";`
+
+	res := RunIlang(input).PrintValue()
+	if res != "hello" {
+		t.Errorf("unable to return a value")
+	}
+}
+
+func TestEarlyReturn(t *testing.T) {
+	input := `return "hello";
+    "hi";`
+
+	res := RunIlang(input).PrintValue()
+	if res != "hello" {
+		t.Errorf("returned value had code run after it")
+	}
+}
+
+func TestReturnVar(t *testing.T) {
+	input := `let val = 3;
+    return val;`
+
+	res := RunIlang(input).PrintValue()
+	if res != int64(3) {
+		t.Errorf("returned value had code run after it")
+	}
 }

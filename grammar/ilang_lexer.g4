@@ -22,6 +22,7 @@ ELSE: 'else';
 WHILE: 'while';
 FOR: 'for';
 IN: 'in';
+RETURN: 'return';
 LET: 'let';
 DOT: F_DOT;
 TRUE: 'true';

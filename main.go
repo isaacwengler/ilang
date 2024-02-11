@@ -10,8 +10,8 @@ func main() {
 
 	input :=
 		`let var = 12;
-    var = "hi";
-    var;`
+    return var;
+    2389;`
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)
 	logger.Debug("Result =", res.PrintValue())

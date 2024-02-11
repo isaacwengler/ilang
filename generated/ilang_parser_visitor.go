@@ -77,6 +77,9 @@ type ilang_parserVisitor interface {
 	// Visit a parse tree produced by ilang_parser#forLoop.
 	VisitForLoop(ctx *ForLoopContext) interface{}
 
+	// Visit a parse tree produced by ilang_parser#return.
+	VisitReturn(ctx *ReturnContext) interface{}
+
 	// Visit a parse tree produced by ilang_parser#elseifStatement.
 	VisitElseifStatement(ctx *ElseifStatementContext) interface{}
 

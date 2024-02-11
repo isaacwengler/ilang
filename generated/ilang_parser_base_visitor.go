@@ -100,6 +100,10 @@ func (v *Baseilang_parserVisitor) VisitForLoop(ctx *ForLoopContext) interface{} 
 	return v.VisitChildren(ctx)
 }
 
+func (v *Baseilang_parserVisitor) VisitReturn(ctx *ReturnContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *Baseilang_parserVisitor) VisitElseifStatement(ctx *ElseifStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }

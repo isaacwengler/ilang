@@ -33,10 +33,11 @@ TODO:
     - has map children with child bindings
     - implemented by all primitives
 - ~~update current to use wrapped value~~
-- parse array and map
+- parse and impl array and map
 - ~~parse and impl reassignments~~
-- parse and impl return
+- ~~parse and impl return~~
 - implement algebra, conds, boolean alg
-- implement control flow
 - implement function call
+- implement control flow
+    - make sure to handle early returns
 - standard functions on wrapped value

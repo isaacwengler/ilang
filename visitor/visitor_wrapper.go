@@ -22,7 +22,7 @@ import (
 func (v *Visitor) VisitWrapped(t antlr.ParseTree) types.WrappedValue {
 	val := v.Visit(t)
 	if val == nil {
-        logger.Warn("VisitWrapped got nil return value")
+		logger.Warn("VisitWrapped got nil return value")
 		return nil
 	}
 	return val.(types.WrappedValue)
@@ -31,7 +31,7 @@ func (v *Visitor) VisitWrapped(t antlr.ParseTree) types.WrappedValue {
 func (v *Visitor) VisitChildrenWrapped(node antlr.RuleNode) types.WrappedValue {
 	val := v.VisitChildren(node)
 	if val == nil {
-        logger.Warn("VisitChildrenWrapped got nil return value")
+		logger.Warn("VisitChildrenWrapped got nil return value")
 		return nil
 	}
 	return val.(types.WrappedValue)
@@ -46,9 +46,14 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 	var curr any
 	for _, n := range node.GetChildren() {
 		curr = v.Visit(n.(antlr.ParseTree))
-		if curr != nil {
-			// TODO: maybe not do this?
-			val = curr
+		switch n.(type) {
+		case *parser.ReturnContext:
+			return curr
+		default:
+			// ignore terminal nodes
+			if curr != nil {
+				val = curr
+			}
 		}
 	}
 
@@ -145,6 +150,10 @@ func (v *Visitor) VisitForeachLoop(ctx *parser.ForeachLoopContext) interface{} {
 
 func (v *Visitor) VisitForLoop(ctx *parser.ForLoopContext) interface{} {
 	return v.VisitForLoopWrapped(ctx)
+}
+
+func (v *Visitor) VisitReturn(ctx *parser.ReturnContext) interface{} {
+	return v.VisitReturnWrapped(ctx)
 }
 
 func (v *Visitor) VisitElseifStatement(ctx *parser.ElseifStatementContext) interface{} {

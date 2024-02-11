@@ -6,7 +6,8 @@ start: block EOF;
 
 block: (
     expr SEMICOLON |
-    statement
+    statement |
+    return
 )+;
 
 statement: (
@@ -46,6 +47,8 @@ whileLoop: WHILE conditionBody scopeBody;
 foreachLoop: FOR OPEN_PAREN SYMBOL IN expr CLOSE_PAREN scopeBody;
 
 forLoop: FOR OPEN_PAREN init=expr SEMICOLON cond=expr SEMICOLON step=expr CLOSE_PAREN scopeBody;
+
+return: RETURN expr SEMICOLON;
 
 elseifStatement: ELSE IF conditionBody scopeBody;
 

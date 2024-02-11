@@ -149,6 +149,11 @@ func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) types.WrappedV
 	return v.VisitChildrenWrapped(ctx)
 }
 
+func (v *Visitor) VisitReturnWrapped(ctx *parser.ReturnContext) types.WrappedValue {
+	logger.Debug("VisitRetun", ctx.GetText())
+    return v.VisitWrapped(ctx.Expr())
+}
+
 func (v *Visitor) VisitElseifStatementWrapped(ctx *parser.ElseifStatementContext) types.WrappedValue {
 	logger.Debug("VisitElseifStatement", ctx.GetText())
 	return v.VisitChildrenWrapped(ctx)
