@@ -28,7 +28,15 @@ func (v *Baseilang_parserVisitor) VisitNullExpr(ctx *NullExprContext) interface{
 	return v.VisitChildren(ctx)
 }
 
+func (v *Baseilang_parserVisitor) VisitArrayExpr(ctx *ArrayExprContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *Baseilang_parserVisitor) VisitBooleanExpr(ctx *BooleanExprContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Baseilang_parserVisitor) VisitMapExpr(ctx *MapExprContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -145,6 +153,22 @@ func (v *Baseilang_parserVisitor) VisitNullLiteral(ctx *NullLiteralContext) inte
 }
 
 func (v *Baseilang_parserVisitor) VisitBooleanLiteral(ctx *BooleanLiteralContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Baseilang_parserVisitor) VisitArrayLiteral(ctx *ArrayLiteralContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Baseilang_parserVisitor) VisitMapLiteral(ctx *MapLiteralContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Baseilang_parserVisitor) VisitMapLiteralItem(ctx *MapLiteralItemContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Baseilang_parserVisitor) VisitMapKey(ctx *MapKeyContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

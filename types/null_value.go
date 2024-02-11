@@ -12,7 +12,7 @@ func (s NullValue) GetChildren() *map[string]WrappedValue {
 	return s.children
 }
 
-func (s NullValue) PrintValue() any {
+func (s NullValue) PrintValue() string {
     return "null" 
 }
 

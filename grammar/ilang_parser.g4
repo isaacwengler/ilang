@@ -26,6 +26,8 @@ expr:
     floatLiteral #floatExpr |
     nullLiteral #nullExpr |
     booleanLiteral #booleanExpr |
+    arrayLiteral #arrayExpr |
+    mapLiteral #mapExpr |
     grouping #groupingExpr |
     functionDef #functionDefExpr |
     expr CONDITIONAL_OP expr #condition |
@@ -72,4 +74,13 @@ nullLiteral: NULL;
 
 booleanLiteral: TRUE | FALSE;
 
+arrayLiteral: OPEN_BRACKET ((items+=expr COMMA)* items+=expr)? CLOSE_BRACKET;
+
+mapLiteral: OPEN_BRACE ((items+=mapLiteralItem COMMA)* items+=mapLiteralItem)? CLOSE_BRACE;
+
+mapLiteralItem:  mapKey COLON expr;
+
+mapKey: (SYMBOL | OPEN_BRACKET expr CLOSE_BRACKET);
+
 grouping: OPEN_PAREN expr CLOSE_PAREN;
+

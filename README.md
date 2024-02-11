@@ -33,7 +33,7 @@ TODO:
     - has map children with child bindings
     - implemented by all primitives
 - ~~update current to use wrapped value~~
-- parse and impl array and map
+- ~~parse and impl array and map~~
 - ~~parse and impl reassignments~~
 - ~~parse and impl return~~
 - implement algebra, conds, boolean alg

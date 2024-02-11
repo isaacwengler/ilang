@@ -23,8 +23,14 @@ type ilang_parserVisitor interface {
 	// Visit a parse tree produced by ilang_parser#nullExpr.
 	VisitNullExpr(ctx *NullExprContext) interface{}
 
+	// Visit a parse tree produced by ilang_parser#arrayExpr.
+	VisitArrayExpr(ctx *ArrayExprContext) interface{}
+
 	// Visit a parse tree produced by ilang_parser#booleanExpr.
 	VisitBooleanExpr(ctx *BooleanExprContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#mapExpr.
+	VisitMapExpr(ctx *MapExprContext) interface{}
 
 	// Visit a parse tree produced by ilang_parser#arithmetic.
 	VisitArithmetic(ctx *ArithmeticContext) interface{}
@@ -112,6 +118,18 @@ type ilang_parserVisitor interface {
 
 	// Visit a parse tree produced by ilang_parser#booleanLiteral.
 	VisitBooleanLiteral(ctx *BooleanLiteralContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#arrayLiteral.
+	VisitArrayLiteral(ctx *ArrayLiteralContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#mapLiteral.
+	VisitMapLiteral(ctx *MapLiteralContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#mapLiteralItem.
+	VisitMapLiteralItem(ctx *MapLiteralItemContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#mapKey.
+	VisitMapKey(ctx *MapKeyContext) interface{}
 
 	// Visit a parse tree produced by ilang_parser#grouping.
 	VisitGrouping(ctx *GroupingContext) interface{}

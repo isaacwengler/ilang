@@ -1,5 +1,7 @@
 package types
 
+import "strconv"
+
 type FloatValue struct {
 	value float64
     children *map[string]WrappedValue
@@ -13,8 +15,8 @@ func (s FloatValue) GetChildren() *map[string]WrappedValue {
 	return s.children
 }
 
-func (s FloatValue) PrintValue() any {
-	return s.value
+func (s FloatValue) PrintValue() string {
+    return strconv.FormatFloat(s.value, 'f', -1, 64)
 }
 
 func NewFloatValue(value float64) *FloatValue {

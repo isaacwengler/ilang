@@ -13,8 +13,12 @@ func (s StringValue) GetChildren() *map[string]WrappedValue {
 	return s.children
 }
 
-func (s StringValue) PrintValue() any {
-	return s.value
+func (s StringValue) PrintValue() string {
+	return `"` + s.value + `"`
+}
+
+func (s StringValue) GetValue() string {
+    return s.value
 }
 
 func NewStringValue(value string) *StringValue {

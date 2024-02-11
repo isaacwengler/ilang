@@ -80,8 +80,16 @@ func (v *Visitor) VisitNullExpr(ctx *parser.NullExprContext) interface{} {
 	return v.VisitNullExprWrapped(ctx)
 }
 
+func (v *Visitor) VisitArrayExpr(ctx *parser.ArrayExprContext) interface{} {
+	return v.VisitArrayExprWrapped(ctx)
+}
+
 func (v *Visitor) VisitBooleanExpr(ctx *parser.BooleanExprContext) interface{} {
 	return v.VisitBooleanExprWrapped(ctx)
+}
+
+func (v *Visitor) VisitMapExpr(ctx *parser.MapExprContext) interface{} {
+	return v.VisitMapExprWrapped(ctx)
 }
 
 func (v *Visitor) VisitArithmetic(ctx *parser.ArithmeticContext) interface{} {
@@ -198,6 +206,22 @@ func (v *Visitor) VisitNullLiteral(ctx *parser.NullLiteralContext) interface{} {
 
 func (v *Visitor) VisitBooleanLiteral(ctx *parser.BooleanLiteralContext) interface{} {
 	return v.VisitBooleanLiteralWrapped(ctx)
+}
+
+func (v *Visitor) VisitArrayLiteral(ctx *parser.ArrayLiteralContext) interface{} {
+	return v.VisitArrayLiteralWrapped(ctx)
+}
+
+func (v *Visitor) VisitMapLiteral(ctx *parser.MapLiteralContext) interface{} {
+	return v.VisitMapLiteralWrapped(ctx)
+}
+
+func (v *Visitor) VisitMapLiteralItem(ctx *parser.MapLiteralItemContext) interface{} {
+	return v.VisitMapLiteralItemWrapped(ctx)
+}
+
+func (v *Visitor) VisitMapKey(ctx *parser.MapKeyContext) interface{} {
+	return v.VisitMapKeyWrapped(ctx)
 }
 
 func (v *Visitor) VisitGrouping(ctx *parser.GroupingContext) interface{} {
