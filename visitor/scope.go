@@ -2,7 +2,6 @@ package visitor
 
 import (
 	"errors"
-	"ilang/logger"
 )
 
 func newScope(parentScope *scope) *scope {
@@ -32,7 +31,6 @@ func (s *scope) resolveVariable(name string) any {
 
     if s.parentScope == nil {
         err := errors.New("Undefined variable " + name) 
-        logger.Error(err.Error())
         panic(err)
     }
     

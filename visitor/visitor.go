@@ -190,9 +190,7 @@ func (v *Visitor) VisitNot(ctx *parser.NotContext) interface{} {
 		return !expr.(bool)
 	default:
 		err := errors.New("Not operator can only be applied to boolean. Got: " + ctx.Expr().GetText())
-		logger.Error(err.Error())
 		panic(err)
-
 	}
 }
 
@@ -212,7 +210,7 @@ func (v *Visitor) VisitIntLiteral(ctx *parser.IntLiteralContext) interface{} {
 	logger.Debug("VisitIntLiteral", ctx.GetText())
 	val, err := strconv.ParseInt(ctx.GetText(), 0, 64)
 	if err != nil {
-		logger.Error("could not parse float", ctx.GetText(), err.Error())
+		logger.Error("could not parse int", ctx.GetText(), err.Error())
 		panic(err)
 	}
 	return val

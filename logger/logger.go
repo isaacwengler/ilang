@@ -16,6 +16,10 @@ func isDebugFlagOn() bool {
 	return false
 }
 
+func Print(v ...any) {
+	fmt.Println(v...)
+}
+
 func Debug(v ...any) {
 	if debugLog {
 		fmt.Print("DEBUG: ")
