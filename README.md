@@ -29,11 +29,12 @@ go run .
 ```
 
 TODO:
-- WrappedValue type
+- ~~WrappedValue type~~
     - has map children with child bindings
     - implemented by all primitives
-- update current to use wrapped value
+- ~~update current to use wrapped value~~
 - parse array and map
 - implement algebra, conds, boolean alg
 - implement control flow
+- implement function call
 - standard functions on wrapped value
