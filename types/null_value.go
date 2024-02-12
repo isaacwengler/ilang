@@ -3,7 +3,7 @@ package types
 import "errors"
 
 type NullValue struct {
-    children *map[string]WrappedValue
+	children *map[string]WrappedValue
 }
 
 func (s NullValue) IsWrappedValue() bool {
@@ -15,7 +15,7 @@ func (s NullValue) GetChildren() *map[string]WrappedValue {
 }
 
 func (s NullValue) PrintValue() string {
-    return "null" 
+	return "null"
 }
 
 func (s NullValue) Comparison(op string, other WrappedValue) *BooleanValue {

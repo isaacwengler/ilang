@@ -1,26 +1,16 @@
 package interpreter
 
 import (
+	"ilang/test"
 	"testing"
 )
-
-func assertPanic(t *testing.T, f func()) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("The code did not panic")
-		}
-	}()
-	f()
-}
 
 func TestStringAssign(t *testing.T) {
 	input := `let var = "expected";
     var;`
 
 	res := RunIlang(input).PrintValue()
-	if res != `"expected"` {
-		t.Errorf("unable to assign string literal")
-	}
+	test.AssertStringsEqual(t, res, `"expected"`)
 }
 
 func TestIntAssign(t *testing.T) {
@@ -28,9 +18,7 @@ func TestIntAssign(t *testing.T) {
     var;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "12" {
-		t.Errorf("unable to assign int literal")
-	}
+	test.AssertStringsEqual(t, res, "12")
 }
 
 func TestNegativeIntAssign(t *testing.T) {
@@ -38,9 +26,7 @@ func TestNegativeIntAssign(t *testing.T) {
     var;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "-12" {
-		t.Errorf("unable to assign int literal")
-	}
+	test.AssertStringsEqual(t, res, "-12")
 }
 
 func TestFloatAssign(t *testing.T) {
@@ -48,9 +34,7 @@ func TestFloatAssign(t *testing.T) {
     var;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "121.243" {
-		t.Errorf("unable to assign float literal")
-	}
+	test.AssertStringsEqual(t, res, "121.243")
 }
 
 func TestBoolAssign(t *testing.T) {
@@ -58,9 +42,7 @@ func TestBoolAssign(t *testing.T) {
     var;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "true" {
-		t.Errorf("unable to assign bool literal")
-	}
+	test.AssertStringsEqual(t, res, "true")
 }
 
 func TestNullAssign(t *testing.T) {
@@ -68,9 +50,7 @@ func TestNullAssign(t *testing.T) {
     var;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "null" {
-		t.Errorf("unable to assign null literal")
-	}
+	test.AssertStringsEqual(t, res, "null")
 }
 
 func TestNot(t *testing.T) {
@@ -78,28 +58,26 @@ func TestNot(t *testing.T) {
     hi;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "false" {
-		t.Errorf("unable to use not operator")
-	}
+	test.AssertStringsEqual(t, res, "false")
 }
 
 func TestInvalidNot(t *testing.T) {
 	input := `let hi = !22;
     hi;`
 
-	assertPanic(t, func() { RunIlang(input) })
+	test.AssertPanic(t, func() { RunIlang(input) })
 }
 
 func TestUndefinedValPanic(t *testing.T) {
 	input := "var;"
 
-	assertPanic(t, func() { RunIlang(input) })
+	test.AssertPanic(t, func() { RunIlang(input) })
 }
 
 func TestReassigningUndefinedValPanic(t *testing.T) {
 	input := "var = 1;"
 
-	assertPanic(t, func() { RunIlang(input) })
+	test.AssertPanic(t, func() { RunIlang(input) })
 }
 
 func TestAssigningAlreadyDefinedValPanic(t *testing.T) {
@@ -107,7 +85,7 @@ func TestAssigningAlreadyDefinedValPanic(t *testing.T) {
     let hi = 1;
     hi;`
 
-	assertPanic(t, func() { RunIlang(input) })
+	test.AssertPanic(t, func() { RunIlang(input) })
 }
 
 func TestReassigning(t *testing.T) {
@@ -116,9 +94,7 @@ func TestReassigning(t *testing.T) {
     hi;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "1" {
-		t.Errorf("unable to reassign variable")
-	}
+	test.AssertStringsEqual(t, res, "1")
 }
 
 func TestReassigningNewType(t *testing.T) {
@@ -127,18 +103,14 @@ func TestReassigningNewType(t *testing.T) {
     hi;`
 
 	res := RunIlang(input).PrintValue()
-	if res != `"hello"` {
-		t.Errorf("unable to reassign variable to a new type")
-	}
+    test.AssertStringsEqual(t, res, `"hello"`)
 }
 
 func TestReturn(t *testing.T) {
 	input := `return "hello";`
 
 	res := RunIlang(input).PrintValue()
-	if res != `"hello"` {
-		t.Errorf("unable to return a value")
-	}
+    test.AssertStringsEqual(t, res, `"hello"`)
 }
 
 func TestEarlyReturn(t *testing.T) {
@@ -146,9 +118,7 @@ func TestEarlyReturn(t *testing.T) {
     "hi";`
 
 	res := RunIlang(input).PrintValue()
-	if res != `"hello"` {
-		t.Errorf("returned value had code run after it")
-	}
+    test.AssertStringsEqual(t, res, `"hello"`)
 }
 
 func TestReturnVar(t *testing.T) {
@@ -156,9 +126,7 @@ func TestReturnVar(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "3" {
-		t.Errorf("returned value had code run after it")
-	}
+    test.AssertStringsEqual(t, res, "3")
 }
 
 func TestArrayLiteral(t *testing.T) {
@@ -166,9 +134,7 @@ func TestArrayLiteral(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-	if res != "[1,2,3,4]" {
-		t.Errorf("unable to assign array literal")
-	}
+    test.AssertStringsEqual(t, res, "[1,2,3,4]")
 }
 
 func TestArrayDifferentTypes(t *testing.T) {
@@ -176,22 +142,27 @@ func TestArrayDifferentTypes(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-	if res != `[1,"hi",3]` {
-		t.Errorf("unable to assign array literal")
-	}
+    test.AssertStringsEqual(t, res, `[1,"hi",3]`)
 }
 
 func TestMap(t *testing.T) {
 	input := `let val = {
-        [1]: 2,
         hi: "hello"
     };
     return val;`
 
 	res := RunIlang(input).PrintValue()
-    if res != `{1:2,"hi":"hello"}` {
-		t.Errorf("unable to assign array literal")
-	}
+    test.AssertStringsEqual(t, res, `{"hi":"hello"}`)
+}
+
+func TestMapComputedProperty(t *testing.T) {
+	input := `let val = {
+        [1]: 2
+    };
+    return val;`
+
+	res := RunIlang(input).PrintValue()
+    test.AssertStringsEqual(t, res, `{1:2}`)
 }
 
 func TestMapInvalidKey(t *testing.T) {
@@ -200,5 +171,5 @@ func TestMapInvalidKey(t *testing.T) {
     };
     return val;`
 
-	assertPanic(t, func() { RunIlang(input) })
+	test.AssertPanic(t, func() { RunIlang(input) })
 }
