@@ -31,8 +31,8 @@ func (s ArrayValue) PrintValue() string {
 
 func (s ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
-    // TODO: array == comparison? by ptr value or value?
-    // ptr value was not as straightforward as I though...
+	// TODO: array == comparison? by ptr value or value?
+	// ptr value was not as straightforward as I though...
 	default:
 		err := errors.New("operator '" + op + "' not supported for array type")
 		panic(err)

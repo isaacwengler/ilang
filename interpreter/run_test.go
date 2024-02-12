@@ -243,3 +243,17 @@ func TestNullEquals(t *testing.T) {
 	res := RunIlang(input).PrintValue()
 	test.AssertStringsEqual(t, res, "true")
 }
+
+func TestComplexComparison(t *testing.T) {
+	input := `1 < 2 == true;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
+
+func TestComplexComparisonWithParens(t *testing.T) {
+	input := `true == (1 < 2);`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
