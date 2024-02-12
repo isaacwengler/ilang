@@ -37,7 +37,7 @@ TODO:
 - ~~parse and impl reassignments~~
 - ~~parse and impl return~~
 - implement algebra, conds, boolean alg
-- implement function call
 - implement control flow
+- implement function call
     - make sure to handle early returns
 - standard functions on wrapped value

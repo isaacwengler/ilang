@@ -1,6 +1,9 @@
 package types
 
-import "ilang/logger"
+import (
+	"errors"
+	"ilang/logger"
+)
 
 type ArrayValue struct {
 	value    []WrappedValue
@@ -27,8 +30,24 @@ func (s ArrayValue) PrintValue() string {
 	return res
 }
 
+func (s ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
+	switch op {
+	case "==":
+		return s.Equals(other)
+	case "!=":
+		return NewBooleanValue(!s.Equals(other).GetValue())
+	default:
+		err := errors.New("operator '" + op + "' not supported for array type")
+		panic(err)
+	}
+}
+
+func (s ArrayValue) Equals(other WrappedValue) *BooleanValue {
+	return NewBooleanValue(&s == other)
+}
+
 func NewArrayValue(value []WrappedValue) *ArrayValue {
-    logger.Debug("initialized array value")
+	logger.Debug("initialized array value")
 	children := make(map[string]WrappedValue)
 	return &ArrayValue{value, &children}
 }

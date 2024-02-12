@@ -64,7 +64,10 @@ func (v *Visitor) VisitFloatExprWrapped(ctx *parser.FloatExprContext) types.Wrap
 }
 
 func (v *Visitor) VisitConditionWrapped(ctx *parser.ConditionContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	first := v.VisitWrapped(ctx.Expr(0))
+	second := v.VisitWrapped(ctx.Expr(1))
+
+	return first.Comparison(ctx.CONDITIONAL_OP().GetText(), second)
 }
 
 func (v *Visitor) VisitNotExprWrapped(ctx *parser.NotExprContext) types.WrappedValue {
