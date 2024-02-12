@@ -103,14 +103,14 @@ func TestReassigningNewType(t *testing.T) {
     hi;`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, `"hello"`)
+	test.AssertStringsEqual(t, res, `"hello"`)
 }
 
 func TestReturn(t *testing.T) {
 	input := `return "hello";`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, `"hello"`)
+	test.AssertStringsEqual(t, res, `"hello"`)
 }
 
 func TestEarlyReturn(t *testing.T) {
@@ -118,7 +118,7 @@ func TestEarlyReturn(t *testing.T) {
     "hi";`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, `"hello"`)
+	test.AssertStringsEqual(t, res, `"hello"`)
 }
 
 func TestReturnVar(t *testing.T) {
@@ -126,7 +126,7 @@ func TestReturnVar(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, "3")
+	test.AssertStringsEqual(t, res, "3")
 }
 
 func TestArrayLiteral(t *testing.T) {
@@ -134,7 +134,7 @@ func TestArrayLiteral(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, "[1,2,3,4]")
+	test.AssertStringsEqual(t, res, "[1,2,3,4]")
 }
 
 func TestArrayDifferentTypes(t *testing.T) {
@@ -142,7 +142,7 @@ func TestArrayDifferentTypes(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, `[1,"hi",3]`)
+	test.AssertStringsEqual(t, res, `[1,"hi",3]`)
 }
 
 func TestMap(t *testing.T) {
@@ -152,7 +152,7 @@ func TestMap(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, `{"hi":"hello"}`)
+	test.AssertStringsEqual(t, res, `{"hi":"hello"}`)
 }
 
 func TestMapComputedProperty(t *testing.T) {
@@ -162,7 +162,7 @@ func TestMapComputedProperty(t *testing.T) {
     return val;`
 
 	res := RunIlang(input).PrintValue()
-    test.AssertStringsEqual(t, res, `{1:2}`)
+	test.AssertStringsEqual(t, res, `{1:2}`)
 }
 
 func TestMapInvalidKey(t *testing.T) {
