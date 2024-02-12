@@ -46,18 +46,10 @@ func (s MapValue) PrintValue() string {
 
 func (s MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
-	case "==":
-		return s.Equals(other)
-	case "!=":
-		return NewBooleanValue(!s.Equals(other).GetValue())
 	default:
 		err := errors.New("operator '" + op + "' not supported for map type")
 		panic(err)
 	}
-}
-
-func (s MapValue) Equals(other WrappedValue) *BooleanValue {
-	return NewBooleanValue(&s == other)
 }
 
 func NewMapValue(value map[any]WrappedValue) *MapValue {

@@ -2,7 +2,6 @@ package types
 
 import (
 	"errors"
-	"ilang/logger"
 )
 
 type ArrayValue struct {
@@ -32,22 +31,15 @@ func (s ArrayValue) PrintValue() string {
 
 func (s ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
-	case "==":
-		return s.Equals(other)
-	case "!=":
-		return NewBooleanValue(!s.Equals(other).GetValue())
+    // TODO: array == comparison? by ptr value or value?
+    // ptr value was not as straightforward as I though...
 	default:
 		err := errors.New("operator '" + op + "' not supported for array type")
 		panic(err)
 	}
 }
 
-func (s ArrayValue) Equals(other WrappedValue) *BooleanValue {
-	return NewBooleanValue(&s == other)
-}
-
 func NewArrayValue(value []WrappedValue) *ArrayValue {
-	logger.Debug("initialized array value")
 	children := make(map[string]WrappedValue)
 	return &ArrayValue{value, &children}
 }

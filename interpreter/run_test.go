@@ -173,3 +173,73 @@ func TestMapInvalidKey(t *testing.T) {
 
 	test.AssertPanic(t, func() { RunIlang(input) })
 }
+
+func TestEqualsComparisonSameInt(t *testing.T) {
+	input := `1 == 1;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
+
+func TestEqualsComparisonDifferentInt(t *testing.T) {
+	input := `1 == 2;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "false")
+}
+
+func TestEqualsComparisonString(t *testing.T) {
+	input := `"hello" == "hello";`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
+
+func TestEqualsComparisonStringDifferent(t *testing.T) {
+	input := `"hello" == "hello2";`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "false")
+}
+
+func TestNotEqualsComparisonSameInt(t *testing.T) {
+	input := `1 != 1;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "false")
+}
+
+func TestEqualsArrayPtr(t *testing.T) {
+	input := `let arr = [1, 3];
+    arr == arr;`
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
+
+func TestInvalidOp(t *testing.T) {
+	input := `let arr = [1, 3];
+    3 <= arr;`
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
+
+func TestInvalidOpReversed(t *testing.T) {
+	input := `let arr = [1, 3];
+    arr <= 4;`
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
+
+func TestNotEqualsComparisonDifferentInt(t *testing.T) {
+	input := `1 != 2;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
+
+func TestNullEquals(t *testing.T) {
+	input := `let hi = null; hi == null;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
