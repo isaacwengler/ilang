@@ -52,7 +52,19 @@ func (v *Visitor) VisitMapExprWrapped(ctx *parser.MapExprContext) types.WrappedV
 }
 
 func (v *Visitor) VisitArithmeticWrapped(ctx *parser.ArithmeticContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	first := v.VisitWrapped(ctx.Expr(0))
+	second := v.VisitWrapped(ctx.Expr(1))
+	op := ctx.ARITHMETIC_OP().GetText()
+
+	switch first.(type) {
+	case *types.IntValue:
+		return first.(*types.IntValue).Arithmetic(op, second)
+	case *types.FloatValue:
+		return first.(*types.FloatValue).Arithmetic(op, second)
+	default:
+		err := errors.New("Arithmetic operator '" + op + "' can only be applied to int or float value")
+		panic(err)
+	}
 }
 
 func (v *Visitor) VisitStringExprWrapped(ctx *parser.StringExprContext) types.WrappedValue {
@@ -91,7 +103,38 @@ func (v *Visitor) VisitGroupingExprWrapped(ctx *parser.GroupingExprContext) type
 }
 
 func (v *Visitor) VisitBooleanAlgebraWrapped(ctx *parser.BooleanAlgebraContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	first := v.VisitWrapped(ctx.Expr(0))
+	second := v.VisitWrapped(ctx.Expr(1))
+	op := ctx.BOOLEAN_OP().GetText()
+
+	var firstBool, secondBool bool
+	switch first.(type) {
+	case *types.BooleanValue:
+		firstBool = first.(*types.BooleanValue).GetValue()
+	default:
+		err := errors.New("Boolean operator '" + op + "' can only be applied to boolean value")
+		panic(err)
+	}
+
+	if op == "||" && firstBool {
+		return types.NewBooleanValue(true)
+	} else if op == "&&" && !firstBool {
+		return types.NewBooleanValue(false)
+	}
+
+	switch second.(type) {
+	case *types.BooleanValue:
+		secondBool = second.(*types.BooleanValue).GetValue()
+	default:
+		err := errors.New("Boolean operator '" + op + "' can only be applied to boolean value")
+		panic(err)
+	}
+
+	if op == "&&" {
+		return types.NewBooleanValue(firstBool && secondBool)
+	} else {
+		return types.NewBooleanValue(firstBool || secondBool)
+	}
 }
 
 func (v *Visitor) VisitFunctionDefWrapped(ctx *parser.FunctionDefContext) types.WrappedValue {
@@ -121,7 +164,23 @@ func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) types.Wr
 }
 
 func (v *Visitor) VisitIfStatementWrapped(ctx *parser.IfStatementContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	condition := evalCondition(v.VisitWrapped(ctx.ConditionBody()))
+	if condition {
+		return v.VisitWrapped(ctx.ScopeBody())
+	}
+
+	for _, elseif := range ctx.AllElseifStatement() {
+		condition := evalCondition(v.VisitWrapped(elseif.ConditionBody()))
+		if condition {
+			return v.VisitWrapped(elseif.ScopeBody())
+		}
+	}
+
+	if ctx.ElseStatement() != nil {
+		return v.VisitWrapped(ctx.ElseStatement().ScopeBody())
+	}
+
+	return types.NewNullValue()
 }
 
 func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) types.WrappedValue {
@@ -265,4 +324,14 @@ func (v *Visitor) VisitMapKeyWrapped(ctx *parser.MapKeyContext) types.WrappedVal
 
 func (v *Visitor) VisitGroupingWrapped(ctx *parser.GroupingContext) types.WrappedValue {
 	return v.VisitWrapped(ctx.Expr())
+}
+
+func evalCondition(c types.WrappedValue) bool {
+	switch c.(type) {
+	case *types.BooleanValue:
+		return c.(*types.BooleanValue).GetValue()
+	default:
+		err := errors.New("Condition body must have boolean value")
+		panic(err)
+	}
 }

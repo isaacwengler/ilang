@@ -36,7 +36,7 @@ TODO:
 - ~~parse and impl array and map~~
 - ~~parse and impl reassignments~~
 - ~~parse and impl return~~
-- implement algebra, conds, boolean alg
+- ~~implement algebra, conds, boolean alg~~
 - implement control flow
 - implement function call
     - make sure to handle early returns

@@ -2,6 +2,7 @@ package types
 
 import (
 	"errors"
+	"math"
 	"strconv"
 )
 
@@ -77,6 +78,52 @@ func (s IntValue) GreaterThan(other WrappedValue) *BooleanValue {
 		return NewBooleanValue(float64(s.GetValue()) > other.(*FloatValue).GetValue())
 	default:
 		err := errors.New("Comparison not supported between int and non-number type")
+		panic(err)
+	}
+}
+
+func (s IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+	switch other.(type) {
+	case *IntValue:
+		otherVal := other.(*IntValue).GetValue()
+		switch op {
+		case "+":
+			return NewIntValue(s.value + otherVal)
+		case "-":
+			return NewIntValue(s.value - otherVal)
+		case "*":
+			return NewIntValue(s.value * otherVal)
+		case "/":
+			return NewFloatValue(float64(s.value) / float64(otherVal))
+		case "%":
+			return NewIntValue(s.value % otherVal)
+		case "//":
+			return NewIntValue(s.value / otherVal)
+		case "**":
+			return NewFloatValue(math.Pow(float64(s.value), float64(otherVal)))
+		default:
+			err := errors.New("Unsupported arithmetic operator '" + op + "' for type int and int")
+			panic(err)
+		}
+	case *FloatValue:
+		otherVal := other.(*FloatValue).GetValue()
+		switch op {
+		case "+":
+			return NewFloatValue(float64(s.value) + otherVal)
+		case "-":
+			return NewFloatValue(float64(s.value) - otherVal)
+		case "*":
+			return NewFloatValue(float64(s.value) * otherVal)
+		case "/":
+			return NewFloatValue(float64(s.value) / otherVal)
+		case "**":
+			return NewFloatValue(math.Pow(float64(s.value), otherVal))
+		default:
+			err := errors.New("Unsupported arithmetic operator '" + op + "' for type int and float")
+			panic(err)
+		}
+	default:
+		err := errors.New("Arithmetic not supported between int and non-number type")
 		panic(err)
 	}
 }

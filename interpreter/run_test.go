@@ -257,3 +257,51 @@ func TestComplexComparisonWithParens(t *testing.T) {
 	res := RunIlang(input).PrintValue()
 	test.AssertStringsEqual(t, res, "true")
 }
+
+func TestBooleanAnd(t *testing.T) {
+	input := `true && true;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
+
+func TestBooleanAndFalse(t *testing.T) {
+	input := `true && false;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "false")
+}
+
+func TestBooleanOr(t *testing.T) {
+	input := `false || true;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "true")
+}
+
+func TestBooleanOpInvalid(t *testing.T) {
+    // this is not javascript
+	input := `true && 1;`
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
+
+func TestAdd(t *testing.T) {
+	input := `3 + 28;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "31")
+}
+
+func TestAddFloat(t *testing.T) {
+	input := `3.3 + 28;`
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "31.3")
+}
+
+func TestAddInvalid(t *testing.T) {
+	input := `true + 28;`
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
