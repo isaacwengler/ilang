@@ -65,6 +65,9 @@ type ilang_parserVisitor interface {
 	// Visit a parse tree produced by ilang_parser#functionDef.
 	VisitFunctionDef(ctx *FunctionDefContext) interface{}
 
+	// Visit a parse tree produced by ilang_parser#functionDefArgs.
+	VisitFunctionDefArgs(ctx *FunctionDefArgsContext) interface{}
+
 	// Visit a parse tree produced by ilang_parser#functionArgs.
 	VisitFunctionArgs(ctx *FunctionArgsContext) interface{}
 

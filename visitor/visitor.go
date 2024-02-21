@@ -91,7 +91,36 @@ func (v *Visitor) VisitFunctionDefExprWrapped(ctx *parser.FunctionDefExprContext
 }
 
 func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	expr := v.VisitWrapped(ctx.Expr())
+	switch expr.(type) {
+	case *types.FunctionValue:
+		function := expr.(*types.FunctionValue)
+
+		logger.Debug("Calling function, switching to closure scope")
+		currentScope := v.scope
+		v.scope = function.ClosureScope
+
+		argsCtx := ctx.FunctionArgs().GetArgs()
+		if len(argsCtx) != len(function.Args) {
+            logger.Error(len(argsCtx), len(function.Args))
+            logger.Error(argsCtx)
+            logger.Error(function.Args)
+			err := errors.New("Received different number of args than expected")
+			panic(err)
+		}
+
+        for i := range argsCtx {
+            v.scope.SetVar(function.Args[i], v.VisitWrapped(argsCtx[i]))
+        }
+
+        res := v.VisitWrapped(function.Def)
+		logger.Debug("Function called, now returning to current scope")
+        v.scope = currentScope
+        return res
+	default:
+		err := errors.New("Attempted to invoke function on value that is not a function")
+		panic(err)
+	}
 }
 
 func (v *Visitor) VisitSymbolExprWrapped(ctx *parser.SymbolExprContext) types.WrappedValue {
@@ -138,7 +167,13 @@ func (v *Visitor) VisitBooleanAlgebraWrapped(ctx *parser.BooleanAlgebraContext) 
 }
 
 func (v *Visitor) VisitFunctionDefWrapped(ctx *parser.FunctionDefContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	symbols := ctx.FunctionDefArgs().AllSYMBOL()
+	args := make([]string, len(symbols))
+	for i, s := range symbols {
+		args[i] = s.GetText()
+	}
+
+	return types.NewFunctionValue(args, ctx.ScopeBody(), v.scope)
 }
 
 func (v *Visitor) VisitFunctionArgsWrapped(ctx *parser.FunctionArgsContext) types.WrappedValue {

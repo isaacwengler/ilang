@@ -6,9 +6,8 @@ import (
 )
 
 type FunctionValue struct {
-	name         string
 	Args         []string
-	Def          *parser.ScopeBodyContext
+	Def          parser.IScopeBodyContext
 	ClosureScope *Scope
 }
 
@@ -17,14 +16,14 @@ func (s FunctionValue) IsWrappedValue() bool {
 }
 
 func (s FunctionValue) PrintValue() string {
-	res := s.name + "("
+	res := "func("
 	for i, arg := range s.Args {
 		res += arg
 		if i != len(s.Args)-1 {
 			res += ","
 		}
 	}
-	res += "}"
+	res += ")"
 	res += ";"
 	return res
 }
@@ -37,6 +36,6 @@ func (s FunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func NewFunctionValue(name string, args []string, def *parser.ScopeBodyContext, outsideScope *Scope) *FunctionValue {
-	return &FunctionValue{name, args, def, outsideScope}
+func NewFunctionValue(args []string, def parser.IScopeBodyContext, outsideScope *Scope) *FunctionValue {
+	return &FunctionValue{args, def, outsideScope}
 }

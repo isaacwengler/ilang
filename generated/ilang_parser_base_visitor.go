@@ -84,6 +84,10 @@ func (v *Baseilang_parserVisitor) VisitFunctionDef(ctx *FunctionDefContext) inte
 	return v.VisitChildren(ctx)
 }
 
+func (v *Baseilang_parserVisitor) VisitFunctionDefArgs(ctx *FunctionDefArgsContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *Baseilang_parserVisitor) VisitFunctionArgs(ctx *FunctionArgsContext) interface{} {
 	return v.VisitChildren(ctx)
 }

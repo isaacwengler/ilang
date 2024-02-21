@@ -9,13 +9,19 @@ func main() {
 	logger.Debug("Starting ilang")
 
 	input := `
-    let total = 0;
+    let getAdder = func(num) {
+        return func(n) {
+            return num + n;
+        };
+    };
 
-    for (let i = 0; i < 5; i = i + 1) {
-        total = total + i;
+    let adder = getAdder(3);
+    let result = 0;
+
+    if (true) {
+        result = adder(20);
     }
-
-    total;
+    result;
     `
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)

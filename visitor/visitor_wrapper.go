@@ -136,6 +136,10 @@ func (v *Visitor) VisitFunctionDef(ctx *parser.FunctionDefContext) interface{} {
 	return v.VisitFunctionDefWrapped(ctx)
 }
 
+func (v *Visitor) VisitFunctionDefArgs(ctx *parser.FunctionDefArgsContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *Visitor) VisitFunctionArgs(ctx *parser.FunctionArgsContext) interface{} {
 	return v.VisitFunctionArgsWrapped(ctx)
 }
