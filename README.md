@@ -37,7 +37,10 @@ TODO:
 - ~~parse and impl reassignments~~
 - ~~parse and impl return~~
 - ~~implement algebra, conds, boolean alg~~
-- implement control flow
+- ~~implement control flow~~
+- ~~refactor value types~~
+- function definition type
 - implement function call
-    - make sure to handle early returns
+- handle early returns
+- map/array indexing
 - standard functions on wrapped value

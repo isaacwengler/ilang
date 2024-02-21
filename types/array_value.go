@@ -5,16 +5,11 @@ import (
 )
 
 type ArrayValue struct {
-	value    []WrappedValue
-	children *map[string]WrappedValue
+	value []WrappedValue
 }
 
 func (s ArrayValue) IsWrappedValue() bool {
 	return true
-}
-
-func (s ArrayValue) GetChildren() *map[string]WrappedValue {
-	return s.children
 }
 
 func (s ArrayValue) GetValue() []WrappedValue {
@@ -44,6 +39,5 @@ func (s ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
 }
 
 func NewArrayValue(value []WrappedValue) *ArrayValue {
-	children := make(map[string]WrappedValue)
-	return &ArrayValue{value, &children}
+	return &ArrayValue{value}
 }

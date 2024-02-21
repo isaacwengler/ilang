@@ -8,16 +8,11 @@ import (
 )
 
 type MapValue struct {
-	value    map[any]WrappedValue
-	children *map[string]WrappedValue
+	value map[any]WrappedValue
 }
 
 func (s MapValue) IsWrappedValue() bool {
 	return true
-}
-
-func (s MapValue) GetChildren() *map[string]WrappedValue {
-	return s.children
 }
 
 func (s MapValue) PrintValue() string {
@@ -53,6 +48,5 @@ func (s MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
 }
 
 func NewMapValue(value map[any]WrappedValue) *MapValue {
-	children := make(map[string]WrappedValue)
-	return &MapValue{value, &children}
+	return &MapValue{value}
 }

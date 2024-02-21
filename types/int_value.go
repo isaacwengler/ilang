@@ -7,16 +7,11 @@ import (
 )
 
 type IntValue struct {
-	value    int64
-	children *map[string]WrappedValue
+	value int64
 }
 
 func (s IntValue) IsWrappedValue() bool {
 	return true
-}
-
-func (s IntValue) GetChildren() *map[string]WrappedValue {
-	return s.children
 }
 
 func (s IntValue) PrintValue() string {
@@ -129,6 +124,5 @@ func (s IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 }
 
 func NewIntValue(value int64) *IntValue {
-	children := make(map[string]WrappedValue)
-	return &IntValue{value, &children}
+	return &IntValue{value}
 }

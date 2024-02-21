@@ -6,16 +6,11 @@ import (
 )
 
 type BooleanValue struct {
-	value    bool
-	children *map[string]WrappedValue
+	value bool
 }
 
 func (s BooleanValue) IsWrappedValue() bool {
 	return true
-}
-
-func (s BooleanValue) GetChildren() *map[string]WrappedValue {
-	return s.children
 }
 
 func (s BooleanValue) PrintValue() string {
@@ -48,6 +43,5 @@ func (s BooleanValue) Equals(other WrappedValue) *BooleanValue {
 }
 
 func NewBooleanValue(value bool) *BooleanValue {
-	children := make(map[string]WrappedValue)
-	return &BooleanValue{value, &children}
+	return &BooleanValue{value}
 }
