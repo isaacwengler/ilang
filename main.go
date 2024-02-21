@@ -9,13 +9,13 @@ func main() {
 	logger.Debug("Starting ilang")
 
 	input := `
-    let num = 0;
+    let total = 0;
 
-    while (num < 5) {
-        num = num + 1;
+    for (let i = 0; i < 5; i = i + 1) {
+        total = total + i;
     }
 
-    num;
+    total;
     `
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)

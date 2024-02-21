@@ -192,11 +192,42 @@ func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) types.Wrap
 }
 
 func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	logger.Debug("pushing new scope for foreach variables")
+	v.scope = newScope(v.scope)
+
+	expr := v.VisitWrapped(ctx.Expr())
+	switch expr.(type) {
+	case *types.ArrayValue:
+		items := expr.(*types.ArrayValue).GetValue()
+		var last types.WrappedValue = types.NewNullValue()
+		for _, item := range items {
+			v.scope.setVar(ctx.SYMBOL().GetText(), item)
+			last = v.VisitWrapped(ctx.ScopeBody())
+		}
+
+		logger.Debug("popping off scope with foreach variables")
+		v.scope = v.scope.parentScope
+		return last
+	default:
+		err := errors.New("foreach loop can only be used with array")
+		panic(err)
+	}
 }
 
 func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	logger.Debug("pushing new scope for for variables")
+	v.scope = newScope(v.scope)
+
+	v.VisitWrapped(ctx.GetInit())
+	var last types.WrappedValue = types.NewNullValue()
+	for evalCondition(v.VisitWrapped(ctx.GetCond())) {
+		last = v.VisitWrapped(ctx.ScopeBody())
+		v.VisitWrapped(ctx.GetStep())
+	}
+
+	logger.Debug("popping off scope with for variables")
+	v.scope = newScope(v.scope)
+	return last
 }
 
 func (v *Visitor) VisitReturnWrapped(ctx *parser.ReturnContext) types.WrappedValue {

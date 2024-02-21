@@ -356,3 +356,50 @@ func TestWhile(t *testing.T) {
 	res := RunIlang(input).PrintValue()
 	test.AssertStringsEqual(t, res, "5")
 }
+
+func TestFor(t *testing.T) {
+	input := `
+    let total = 0;
+
+    for (let i = 0; i < 5; i = i + 1) {
+        total = total + i;
+    }
+
+    total;
+    `
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "10")
+}
+
+func TestForEach(t *testing.T) {
+	input := `
+    let total = 0;
+    let items = [1, 2, 3, 4];
+
+    for (item in items) {
+        total = total + item;
+    }
+
+    total;
+    `
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "10")
+}
+
+func TestForEachInvalid(t *testing.T) {
+	input := `
+    let total = 0;
+    let items = {a: 1};
+
+    for (item in items) {
+        total = total + item;
+    }
+
+    total;
+    `
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
+

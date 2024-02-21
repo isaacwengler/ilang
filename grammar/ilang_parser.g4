@@ -11,7 +11,7 @@ block: (
 )+;
 
 statement: (
-    assignment |
+    assignment SEMICOLON |
     ifStatement |
     whileLoop |
     forLoop |
@@ -40,7 +40,7 @@ functionDef: FUNC functionArgs scopeBody;
 
 functionArgs: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
 
-assignment: LET? SYMBOL EQUALS expr SEMICOLON;
+assignment: LET? SYMBOL EQUALS expr;
 
 ifStatement: IF conditionBody scopeBody elseifStatement* elseStatement?;
 
@@ -48,7 +48,7 @@ whileLoop: WHILE conditionBody scopeBody;
 
 foreachLoop: FOR OPEN_PAREN SYMBOL IN expr CLOSE_PAREN scopeBody;
 
-forLoop: FOR OPEN_PAREN init=assignment SEMICOLON cond=expr SEMICOLON step=expr CLOSE_PAREN scopeBody;
+forLoop: FOR OPEN_PAREN init=assignment SEMICOLON cond=expr SEMICOLON step=assignment CLOSE_PAREN scopeBody;
 
 return: RETURN expr SEMICOLON;
 

@@ -17,6 +17,10 @@ func (s ArrayValue) GetChildren() *map[string]WrappedValue {
 	return s.children
 }
 
+func (s ArrayValue) GetValue() []WrappedValue {
+	return s.value
+}
+
 func (s ArrayValue) PrintValue() string {
 	res := "["
 	for i, item := range s.value {
