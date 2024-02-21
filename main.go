@@ -9,11 +9,16 @@ func main() {
 	logger.Debug("Starting ilang")
 
 	input := `
-    let val = 3;
-    if (true) {
-        let val = 2;
+    let num = 0;
+    let done = null;
+
+    if (num < 0) {
+       done = -1; 
+    } else if (num > 0) {
+        done = 1;
     }
-    val;
+
+    done;
     `
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)
