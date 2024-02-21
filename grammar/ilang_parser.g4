@@ -36,7 +36,9 @@ expr:
     expr  functionArgs #functionCall
 ;
 
-functionDef: FUNC functionArgs scopeBody;
+functionDef: FUNC functionDefArgs scopeBody;
+
+functionDefArgs: OPEN_PAREN ((SYMBOL COMMA)* SYMBOL)? CLOSE_PAREN;
 
 functionArgs: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
 

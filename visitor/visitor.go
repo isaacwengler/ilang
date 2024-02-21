@@ -11,12 +11,12 @@ import (
 )
 
 func NewVisitor() *Visitor {
-	return &Visitor{&antlr.BaseParseTreeVisitor{}, newScope(nil)}
+	return &Visitor{&antlr.BaseParseTreeVisitor{}, types.NewScope(nil)}
 }
 
 type Visitor struct {
 	*antlr.BaseParseTreeVisitor
-	scope *scope
+	scope *types.Scope
 }
 
 func (v *Visitor) VisitStartWrapped(ctx *parser.StartContext) types.WrappedValue {
@@ -151,15 +151,15 @@ func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) types.Wr
 	value := v.VisitWrapped(ctx.Expr())
 
 	if isReassignment {
-		v.scope.reassignVariable(variable, value)
+		v.scope.ReassignVariable(variable, value)
 		return value
 	}
 
-	_, isPresentInCurrentScope := v.scope.getVar(variable)
+	_, isPresentInCurrentScope := v.scope.GetVar(variable)
 	if isPresentInCurrentScope {
 		panic(errors.New("variable '" + variable + "' already defined in scope"))
 	}
-	v.scope.setVar(variable, value)
+	v.scope.SetVar(variable, value)
 	return value
 }
 
@@ -193,7 +193,7 @@ func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) types.Wrap
 
 func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) types.WrappedValue {
 	logger.Debug("pushing new scope for foreach variables")
-	v.scope = newScope(v.scope)
+	v.scope = types.NewScope(v.scope)
 
 	expr := v.VisitWrapped(ctx.Expr())
 	switch expr.(type) {
@@ -201,12 +201,12 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) types.
 		items := expr.(*types.ArrayValue).GetValue()
 		var last types.WrappedValue = types.NewNullValue()
 		for _, item := range items {
-			v.scope.setVar(ctx.SYMBOL().GetText(), item)
+			v.scope.SetVar(ctx.SYMBOL().GetText(), item)
 			last = v.VisitWrapped(ctx.ScopeBody())
 		}
 
 		logger.Debug("popping off scope with foreach variables")
-		v.scope = v.scope.parentScope
+		v.scope = v.scope.ParentScope
 		return last
 	default:
 		err := errors.New("foreach loop can only be used with array")
@@ -216,7 +216,7 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) types.
 
 func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) types.WrappedValue {
 	logger.Debug("pushing new scope for for variables")
-	v.scope = newScope(v.scope)
+	v.scope = types.NewScope(v.scope)
 
 	v.VisitWrapped(ctx.GetInit())
 	var last types.WrappedValue = types.NewNullValue()
@@ -226,7 +226,7 @@ func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) types.WrappedV
 	}
 
 	logger.Debug("popping off scope with for variables")
-	v.scope = newScope(v.scope)
+	v.scope = types.NewScope(v.scope)
 	return last
 }
 
@@ -244,12 +244,12 @@ func (v *Visitor) VisitElseStatementWrapped(ctx *parser.ElseStatementContext) ty
 
 func (v *Visitor) VisitScopeBodyWrapped(ctx *parser.ScopeBodyContext) types.WrappedValue {
 	logger.Debug("pushing new scope")
-	v.scope = newScope(v.scope)
+	v.scope = types.NewScope(v.scope)
 
 	val := v.VisitChildrenWrapped(ctx)
 
 	logger.Debug("popping off scope")
-	v.scope = v.scope.parentScope
+	v.scope = v.scope.ParentScope
 	return val
 }
 
@@ -270,7 +270,7 @@ func (v *Visitor) VisitNotWrapped(ctx *parser.NotContext) types.WrappedValue {
 }
 
 func (v *Visitor) VisitSymbolWrapped(ctx *parser.SymbolContext) types.WrappedValue {
-	return v.scope.resolveVariable(ctx.GetText())
+	return v.scope.ResolveVariable(ctx.GetText())
 }
 
 func (v *Visitor) VisitStringLiteralWrapped(ctx *parser.StringLiteralContext) types.WrappedValue {
