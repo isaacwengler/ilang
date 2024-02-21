@@ -10,15 +10,12 @@ func main() {
 
 	input := `
     let num = 0;
-    let done = null;
 
-    if (num < 0) {
-       done = -1; 
-    } else if (num > 0) {
-        done = 1;
+    while (num < 5) {
+        num = num + 1;
     }
 
-    done;
+    num;
     `
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)

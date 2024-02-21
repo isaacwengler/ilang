@@ -184,7 +184,11 @@ func (v *Visitor) VisitIfStatementWrapped(ctx *parser.IfStatementContext) types.
 }
 
 func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) types.WrappedValue {
-	return v.VisitChildrenWrapped(ctx)
+	var last types.WrappedValue = types.NewNullValue()
+	for evalCondition(v.VisitWrapped(ctx.ConditionBody())) {
+		last = v.VisitWrapped(ctx.ScopeBody())
+	}
+	return last
 }
 
 func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) types.WrappedValue {

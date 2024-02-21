@@ -280,7 +280,7 @@ func TestBooleanOr(t *testing.T) {
 }
 
 func TestBooleanOpInvalid(t *testing.T) {
-    // this is not javascript
+	// this is not javascript
 	input := `true && 1;`
 
 	test.AssertPanic(t, func() { RunIlang(input) })
@@ -304,4 +304,55 @@ func TestAddInvalid(t *testing.T) {
 	input := `true + 28;`
 
 	test.AssertPanic(t, func() { RunIlang(input) })
+}
+
+func TestIfPanic(t *testing.T) {
+	input := `if ("hi") {
+        let hi = 5;
+    }`
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
+
+func TestIf(t *testing.T) {
+	input := `
+    let num = 6;
+    let next = null;
+
+    if (num < 0) {
+        next = -1;
+    } else if (num == 0) {
+        next = 0;
+    } else {
+        next = 1;
+    }
+
+    next;
+    `
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "1")
+}
+
+func TestWhilePanic(t *testing.T) {
+	input := `while (1) {
+        let hi = 5;
+    }`
+
+	test.AssertPanic(t, func() { RunIlang(input) })
+}
+
+func TestWhile(t *testing.T) {
+	input := `
+    let num = 0;
+
+    while (num < 5) {
+        num = num + 1;
+    }
+
+    num;
+    `
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, "5")
 }
