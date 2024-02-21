@@ -15,13 +15,7 @@ func main() {
         };
     };
 
-    let adder = getAdder(3);
-    let result = 0;
-
-    if (true) {
-        result = adder(20);
-    }
-    result;
+    getAdder(100)(31);
     `
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)

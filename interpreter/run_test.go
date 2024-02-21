@@ -403,3 +403,12 @@ func TestForEachInvalid(t *testing.T) {
 	test.AssertPanic(t, func() { RunIlang(input) })
 }
 
+func TestStringConcat(t *testing.T) {
+	input := `
+    let a = "hi " + "world";
+    a;
+    `
+
+	res := RunIlang(input).PrintValue()
+	test.AssertStringsEqual(t, res, `"hi world"`)
+}

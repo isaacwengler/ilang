@@ -61,8 +61,10 @@ func (v *Visitor) VisitArithmeticWrapped(ctx *parser.ArithmeticContext) types.Wr
 		return first.(*types.IntValue).Arithmetic(op, second)
 	case *types.FloatValue:
 		return first.(*types.FloatValue).Arithmetic(op, second)
+	case *types.StringValue:
+		return first.(*types.StringValue).Arithmetic(op, second)
 	default:
-		err := errors.New("Arithmetic operator '" + op + "' can only be applied to int or float value")
+		err := errors.New("Arithmetic operator '" + op + "' not defined for value type")
 		panic(err)
 	}
 }
@@ -102,21 +104,21 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) type
 
 		argsCtx := ctx.FunctionArgs().GetArgs()
 		if len(argsCtx) != len(function.Args) {
-            logger.Error(len(argsCtx), len(function.Args))
-            logger.Error(argsCtx)
-            logger.Error(function.Args)
+			logger.Error(len(argsCtx), len(function.Args))
+			logger.Error(argsCtx)
+			logger.Error(function.Args)
 			err := errors.New("Received different number of args than expected")
 			panic(err)
 		}
 
-        for i := range argsCtx {
-            v.scope.SetVar(function.Args[i], v.VisitWrapped(argsCtx[i]))
-        }
+		for i := range argsCtx {
+			v.scope.SetVar(function.Args[i], v.VisitWrapped(argsCtx[i]))
+		}
 
-        res := v.VisitWrapped(function.Def)
+		res := v.VisitWrapped(function.Def)
 		logger.Debug("Function called, now returning to current scope")
-        v.scope = currentScope
-        return res
+		v.scope = currentScope
+		return res
 	default:
 		err := errors.New("Attempted to invoke function on value that is not a function")
 		panic(err)

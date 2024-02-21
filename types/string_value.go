@@ -3,7 +3,7 @@ package types
 import "errors"
 
 type StringValue struct {
-	value    string
+	value string
 }
 
 func (s StringValue) IsWrappedValue() bool {
@@ -63,6 +63,23 @@ func (s StringValue) GreaterThan(other WrappedValue) *BooleanValue {
 		return NewBooleanValue(s.GetValue() > other.(*StringValue).GetValue())
 	default:
 		err := errors.New("Comparison not supported between string and other type")
+		panic(err)
+	}
+}
+
+func (s StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+	switch other.(type) {
+	case *StringValue:
+		otherVal := other.(*StringValue).GetValue()
+		switch op {
+		case "+":
+			return NewStringValue(s.value + otherVal)
+		default:
+			err := errors.New("Unsupported arithmetic operator '" + op + "' for type string")
+			panic(err)
+		}
+	default:
+		err := errors.New("Arithmetic not supported between string other than +")
 		panic(err)
 	}
 }
