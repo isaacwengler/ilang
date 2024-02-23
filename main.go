@@ -9,14 +9,15 @@ func main() {
 	logger.Debug("Starting ilang")
 
 	input := `
-    let getAdder = func(num) {
-        return func(n) {
-            return num + n;
+        let hi = "hi ";
+        
+        let sayHi = func(name) {
+            println(hi + name);
         };
-    };
-
-    getAdder(100)(31);
+        
+        sayHi("ilang");
     `
+
 	logger.Debug("input displayed below\n", input)
 	res := interpreter.RunIlang(input)
 	logger.Debug("Result =", res.PrintValue())

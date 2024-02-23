@@ -11,7 +11,10 @@ import (
 )
 
 func NewVisitor() *Visitor {
-	return &Visitor{&antlr.BaseParseTreeVisitor{}, types.NewScope(nil)}
+	v := &Visitor{&antlr.BaseParseTreeVisitor{}, types.NewScope(nil)}
+	v.registerFunctions()
+	v.scope = types.NewScope(v.scope)
+	return v
 }
 
 type Visitor struct {
@@ -119,6 +122,13 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) type
 		logger.Debug("Function called, now returning to current scope")
 		v.scope = currentScope
 		return res
+	case *types.LibFunctionValue:
+		argsCtx := ctx.FunctionArgs().GetArgs()
+		args := make([]types.WrappedValue, len(argsCtx))
+		for i, a := range argsCtx {
+			args[i] = v.VisitWrapped(a)
+		}
+		return expr.(*types.LibFunctionValue).Call(args)
 	default:
 		err := errors.New("Attempted to invoke function on value that is not a function")
 		panic(err)

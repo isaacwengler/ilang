@@ -39,8 +39,8 @@ TODO:
 - ~~implement algebra, conds, boolean alg~~
 - ~~implement control flow~~
 - ~~refactor value types~~
-- function definition type
-- implement function call
-- handle early returns
+- ~~function definition type~~
+- ~~implement function call~~
 - map/array indexing
 - standard functions on wrapped value
+- handle early returns
