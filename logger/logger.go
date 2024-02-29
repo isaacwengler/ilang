@@ -2,18 +2,12 @@ package logger
 
 import (
 	"fmt"
-	"os"
 )
 
-var debugLog = isDebugFlagOn()
+var debugLog = false
 
-func isDebugFlagOn() bool {
-	for _, flag := range os.Args[1:] {
-		if flag == "-d" || flag == "--debug" {
-			return true
-		}
-	}
-	return false
+func SetDebugMode(flag bool) {
+	debugLog = flag
 }
 
 func Print(v ...any) {

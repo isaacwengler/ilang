@@ -41,6 +41,9 @@ TODO:
 - ~~refactor value types~~
 - ~~function definition type~~
 - ~~implement function call~~
+- ~~command line with file and interactive mode~~
 - map/array indexing
 - standard functions on wrapped value
 - handle early returns
+- custom error stat https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
+- imports
