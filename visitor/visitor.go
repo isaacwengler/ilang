@@ -12,7 +12,7 @@ import (
 
 func NewVisitor() *Visitor {
 	v := &Visitor{&antlr.BaseParseTreeVisitor{}, types.NewScope(nil)}
-	v.registerFunctions()
+	v.registerGlobalFunctions()
 	v.scope = types.NewScope(v.scope)
 	return v
 }
