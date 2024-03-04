@@ -2,14 +2,13 @@ package library
 
 import (
 	"fmt"
-	"ilang/types"
 )
 
-func Print(args []types.WrappedValue) types.WrappedValue {
+func Print(args []WrappedValue) WrappedValue {
 	for i, arg := range args {
 		switch arg.(type) {
-		case *types.StringValue:
-			fmt.Print(arg.(*types.StringValue).GetValue())
+		case *StringValue:
+			fmt.Print(arg.(*StringValue).GetValue())
 		default:
 			fmt.Print(arg.PrintValue())
 		}
@@ -18,11 +17,11 @@ func Print(args []types.WrappedValue) types.WrappedValue {
 			fmt.Print(" ")
 		}
 	}
-	return types.NewNullValue()
+	return NewNullValue()
 }
 
-func Println(args []types.WrappedValue) types.WrappedValue {
+func Println(args []WrappedValue) WrappedValue {
 	Print(args)
 	fmt.Println()
-	return types.NewNullValue()
+	return NewNullValue()
 }

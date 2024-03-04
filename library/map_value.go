@@ -1,4 +1,4 @@
-package types
+package library
 
 import (
 	"errors"
@@ -45,6 +45,10 @@ func (s MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
 		err := errors.New("operator '" + op + "' not supported for map type")
 		panic(err)
 	}
+}
+
+func (s MapValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
 }
 
 func NewMapValue(value map[any]WrappedValue) *MapValue {

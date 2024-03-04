@@ -12,6 +12,7 @@ block: (
 
 statement: (
     assignment SEMICOLON |
+    reassignment SEMICOLON |
     ifStatement |
     whileLoop |
     forLoop |
@@ -42,7 +43,9 @@ functionDefArgs: OPEN_PAREN ((SYMBOL COMMA)* SYMBOL)? CLOSE_PAREN;
 
 functionArgs: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
 
-assignment: LET? SYMBOL EQUALS expr;
+assignment: LET SYMBOL EQUALS expr;
+
+reassignment: symbol EQUALS expr;
 
 ifStatement: IF conditionBody scopeBody elseifStatement* elseStatement?;
 
@@ -50,7 +53,7 @@ whileLoop: WHILE conditionBody scopeBody;
 
 foreachLoop: FOR OPEN_PAREN SYMBOL IN expr CLOSE_PAREN scopeBody;
 
-forLoop: FOR OPEN_PAREN init=assignment SEMICOLON cond=expr SEMICOLON step=assignment CLOSE_PAREN scopeBody;
+forLoop: FOR OPEN_PAREN init=assignment SEMICOLON cond=expr SEMICOLON step=reassignment CLOSE_PAREN scopeBody;
 
 return: RETURN expr SEMICOLON;
 
@@ -64,7 +67,9 @@ conditionBody: OPEN_PAREN expr CLOSE_PAREN;
 
 not: NOT expr;
 
-symbol: SYMBOL (DOT symbol)?;
+symbol: SYMBOL symbolChild?;
+
+symbolChild: (OPEN_BRACKET expr CLOSE_BRACKET | DOT SYMBOL) symbolChild?; 
 
 stringLiteral: STRING;
 

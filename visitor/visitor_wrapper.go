@@ -3,7 +3,7 @@ package visitor
 import (
 	parser "ilang/generated"
 	"ilang/logger"
-	"ilang/types"
+	"ilang/library"
 
 	"github.com/antlr4-go/antlr/v4"
 )
@@ -19,22 +19,22 @@ import (
  * TODO: move off antlr? It seems not best suited for go
  */
 
-func (v *Visitor) VisitWrapped(t antlr.ParseTree) types.WrappedValue {
+func (v *Visitor) VisitWrapped(t antlr.ParseTree) library.WrappedValue {
 	val := v.Visit(t)
 	if val == nil {
 		logger.Warn("VisitWrapped got nil return value")
 		return nil
 	}
-	return val.(types.WrappedValue)
+	return val.(library.WrappedValue)
 }
 
-func (v *Visitor) VisitChildrenWrapped(node antlr.RuleNode) types.WrappedValue {
+func (v *Visitor) VisitChildrenWrapped(node antlr.RuleNode) library.WrappedValue {
 	val := v.VisitChildren(node)
 	if val == nil {
 		logger.Warn("VisitChildrenWrapped got nil return value")
 		return nil
 	}
-	return val.(types.WrappedValue)
+	return val.(library.WrappedValue)
 }
 
 func (v *Visitor) Visit(t antlr.ParseTree) interface{} {
@@ -148,6 +148,10 @@ func (v *Visitor) VisitAssignment(ctx *parser.AssignmentContext) interface{} {
 	return v.VisitAssignmentWrapped(ctx)
 }
 
+func (v *Visitor) VisitReassignment(ctx *parser.ReassignmentContext) interface{} {
+	return v.VisitReassignmentWrapped(ctx)
+}
+
 func (v *Visitor) VisitIfStatement(ctx *parser.IfStatementContext) interface{} {
 	return v.VisitIfStatementWrapped(ctx)
 }
@@ -231,3 +235,8 @@ func (v *Visitor) VisitMapKey(ctx *parser.MapKeyContext) interface{} {
 func (v *Visitor) VisitGrouping(ctx *parser.GroupingContext) interface{} {
 	return v.VisitGroupingWrapped(ctx)
 }
+
+func (v *Visitor) VisitSymbolChild(ctx *parser.SymbolChildContext) interface{} {
+	return v.VisitSymbolChildWrapped(ctx)
+}
+

@@ -96,6 +96,10 @@ func (v *Baseilang_parserVisitor) VisitAssignment(ctx *AssignmentContext) interf
 	return v.VisitChildren(ctx)
 }
 
+func (v *Baseilang_parserVisitor) VisitReassignment(ctx *ReassignmentContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *Baseilang_parserVisitor) VisitIfStatement(ctx *IfStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -137,6 +141,10 @@ func (v *Baseilang_parserVisitor) VisitNot(ctx *NotContext) interface{} {
 }
 
 func (v *Baseilang_parserVisitor) VisitSymbol(ctx *SymbolContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Baseilang_parserVisitor) VisitSymbolChild(ctx *SymbolChildContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

@@ -1,4 +1,4 @@
-package types
+package library
 
 import (
 	"errors"
@@ -34,6 +34,10 @@ func (s FunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
 		err := errors.New("operator '" + op + "' not supported for function type")
 		panic(err)
 	}
+}
+
+func (s FunctionValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
 }
 
 func NewFunctionValue(args []string, def parser.IScopeBodyContext, outsideScope *Scope) *FunctionValue {

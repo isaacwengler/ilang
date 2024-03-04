@@ -74,6 +74,9 @@ type ilang_parserVisitor interface {
 	// Visit a parse tree produced by ilang_parser#assignment.
 	VisitAssignment(ctx *AssignmentContext) interface{}
 
+	// Visit a parse tree produced by ilang_parser#reassignment.
+	VisitReassignment(ctx *ReassignmentContext) interface{}
+
 	// Visit a parse tree produced by ilang_parser#ifStatement.
 	VisitIfStatement(ctx *IfStatementContext) interface{}
 
@@ -106,6 +109,9 @@ type ilang_parserVisitor interface {
 
 	// Visit a parse tree produced by ilang_parser#symbol.
 	VisitSymbol(ctx *SymbolContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#symbolChild.
+	VisitSymbolChild(ctx *SymbolChildContext) interface{}
 
 	// Visit a parse tree produced by ilang_parser#stringLiteral.
 	VisitStringLiteral(ctx *StringLiteralContext) interface{}

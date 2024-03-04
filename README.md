@@ -1,6 +1,13 @@
 # ilang
 
-Isaac's toy programming language
+Toy programming language to experiment with writing an interpreter.
+
+Next maybe in this repo, maybe in new ones:
+- LSP server
+- treesitter integration
+- Static types
+- Compiler? maybe
+- Garbage collection
 
 ## Setup
 
@@ -28,7 +35,8 @@ go run .
 ./build/ilang -d
 ```
 
-TODO:
+## Interpreter TODO
+
 - ~~WrappedValue type~~
     - has map children with child bindings
     - implemented by all primitives
@@ -43,7 +51,8 @@ TODO:
 - ~~implement function call~~
 - ~~command line with file and interactive mode~~
 - map/array indexing
-- standard functions on wrapped value
 - handle early returns
 - custom error stat https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
-- imports
+- imports/exports
+- standard functions on wrapped value
+- simple package manager (un-versioned git repo curls? maybe)

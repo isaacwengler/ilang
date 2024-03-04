@@ -1,4 +1,4 @@
-package types
+package library
 
 import (
 	"errors"
@@ -34,6 +34,23 @@ func (s ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	// ptr value was not as straightforward as I though...
 	default:
 		err := errors.New("operator '" + op + "' not supported for array type")
+		panic(err)
+	}
+}
+
+func (s ArrayValue) GetChild(key WrappedValue) WrappedValue {
+	switch key.(type) {
+	case *IntValue:
+		index := key.(*IntValue).GetValue()
+		if index < 0 || index >= int64(len(s.value)) {
+			err := errors.New("Array index out of bounds")
+			panic(err)
+		}
+		return s.value[index]
+	case *StringValue:
+		return makeArrayFunction(&s, key.(*StringValue).GetValue())
+	default:
+		err := errors.New("Array indexing only supported with int and string values")
 		panic(err)
 	}
 }

@@ -1,0 +1,30 @@
+package test
+
+import (
+	"ilang/interpreter"
+	"testing"
+)
+
+func TestArrayLiteral(t *testing.T) {
+	input := `let val = [1, 2, 3, 4];
+    return val;`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "[1,2,3,4]")
+}
+
+func TestArrayDifferentTypes(t *testing.T) {
+	input := `let val = [1, "hi", 3];
+    return val;`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `[1,"hi",3]`)
+}
+
+func TestEqualsArrayPtr(t *testing.T) {
+	input := `let arr = [1, 3];
+    arr == arr;`
+
+	assertPanic(t, func() { interpreter.RunIlang(input) })
+}
+

@@ -1,4 +1,4 @@
-package types
+package library
 
 import "errors"
 
@@ -82,6 +82,10 @@ func (s StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 		err := errors.New("Arithmetic not supported between string other than +")
 		panic(err)
 	}
+}
+
+func (s StringValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
 }
 
 func NewStringValue(value string) *StringValue {

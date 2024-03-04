@@ -1,7 +1,7 @@
-package interpreter
+package test
 
 import (
-	"ilang/test"
+	"ilang/interpreter"
 	"testing"
 )
 
@@ -9,75 +9,75 @@ func TestStringAssign(t *testing.T) {
 	input := `let var = "expected";
     var;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `"expected"`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `"expected"`)
 }
 
 func TestIntAssign(t *testing.T) {
 	input := `let var = 12;
     var;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "12")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "12")
 }
 
 func TestNegativeIntAssign(t *testing.T) {
 	input := `let var = -12;
     var;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "-12")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "-12")
 }
 
 func TestFloatAssign(t *testing.T) {
 	input := `let var = 121.243;
     var;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "121.243")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "121.243")
 }
 
 func TestBoolAssign(t *testing.T) {
 	input := `let var = true;
     var;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestNullAssign(t *testing.T) {
 	input := `let var = null;
     var;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "null")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "null")
 }
 
 func TestNot(t *testing.T) {
 	input := `let hi = !true;
     hi;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "false")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "false")
 }
 
 func TestInvalidNot(t *testing.T) {
 	input := `let hi = !22;
     hi;`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestUndefinedValPanic(t *testing.T) {
 	input := "var;"
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestReassigningUndefinedValPanic(t *testing.T) {
 	input := "var = 1;"
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestAssigningAlreadyDefinedValPanic(t *testing.T) {
@@ -85,7 +85,7 @@ func TestAssigningAlreadyDefinedValPanic(t *testing.T) {
     let hi = 1;
     hi;`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestReassigning(t *testing.T) {
@@ -93,8 +93,8 @@ func TestReassigning(t *testing.T) {
     hi = 1;
     hi;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "1")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "1")
 }
 
 func TestReassigningNewType(t *testing.T) {
@@ -102,47 +102,31 @@ func TestReassigningNewType(t *testing.T) {
     hi = "hello";
     hi;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `"hello"`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `"hello"`)
 }
 
 func TestReturn(t *testing.T) {
 	input := `return "hello";`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `"hello"`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `"hello"`)
 }
 
 func TestEarlyReturn(t *testing.T) {
 	input := `return "hello";
     "hi";`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `"hello"`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `"hello"`)
 }
 
 func TestReturnVar(t *testing.T) {
 	input := `let val = 3;
     return val;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "3")
-}
-
-func TestArrayLiteral(t *testing.T) {
-	input := `let val = [1, 2, 3, 4];
-    return val;`
-
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "[1,2,3,4]")
-}
-
-func TestArrayDifferentTypes(t *testing.T) {
-	input := `let val = [1, "hi", 3];
-    return val;`
-
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `[1,"hi",3]`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "3")
 }
 
 func TestMap(t *testing.T) {
@@ -151,8 +135,8 @@ func TestMap(t *testing.T) {
     };
     return val;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `{"hi":"hello"}`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `{"hi":"hello"}`)
 }
 
 func TestMapComputedProperty(t *testing.T) {
@@ -161,8 +145,8 @@ func TestMapComputedProperty(t *testing.T) {
     };
     return val;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `{1:2}`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `{1:2}`)
 }
 
 func TestMapInvalidKey(t *testing.T) {
@@ -171,139 +155,132 @@ func TestMapInvalidKey(t *testing.T) {
     };
     return val;`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestEqualsComparisonSameInt(t *testing.T) {
 	input := `1 == 1;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestEqualsComparisonDifferentInt(t *testing.T) {
 	input := `1 == 2;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "false")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "false")
 }
 
 func TestEqualsComparisonString(t *testing.T) {
 	input := `"hello" == "hello";`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestEqualsComparisonStringDifferent(t *testing.T) {
 	input := `"hello" == "hello2";`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "false")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "false")
 }
 
 func TestNotEqualsComparisonSameInt(t *testing.T) {
 	input := `1 != 1;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "false")
-}
-
-func TestEqualsArrayPtr(t *testing.T) {
-	input := `let arr = [1, 3];
-    arr == arr;`
-
-	test.AssertPanic(t, func() { RunIlang(input) })
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "false")
 }
 
 func TestInvalidOp(t *testing.T) {
 	input := `let arr = [1, 3];
     3 <= arr;`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestInvalidOpReversed(t *testing.T) {
 	input := `let arr = [1, 3];
     arr <= 4;`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestNotEqualsComparisonDifferentInt(t *testing.T) {
 	input := `1 != 2;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestNullEquals(t *testing.T) {
 	input := `let hi = null; hi == null;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestComplexComparison(t *testing.T) {
 	input := `1 < 2 == true;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestComplexComparisonWithParens(t *testing.T) {
 	input := `true == (1 < 2);`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestBooleanAnd(t *testing.T) {
 	input := `true && true;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestBooleanAndFalse(t *testing.T) {
 	input := `true && false;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "false")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "false")
 }
 
 func TestBooleanOr(t *testing.T) {
 	input := `false || true;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "true")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
 }
 
 func TestBooleanOpInvalid(t *testing.T) {
 	// this is not javascript
 	input := `true && 1;`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestAdd(t *testing.T) {
 	input := `3 + 28;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "31")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "31")
 }
 
 func TestAddFloat(t *testing.T) {
 	input := `3.3 + 28;`
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "31.3")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "31.3")
 }
 
 func TestAddInvalid(t *testing.T) {
 	input := `true + 28;`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestIfPanic(t *testing.T) {
@@ -311,7 +288,7 @@ func TestIfPanic(t *testing.T) {
         let hi = 5;
     }`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestIf(t *testing.T) {
@@ -330,8 +307,8 @@ func TestIf(t *testing.T) {
     next;
     `
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "1")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "1")
 }
 
 func TestWhilePanic(t *testing.T) {
@@ -339,7 +316,7 @@ func TestWhilePanic(t *testing.T) {
         let hi = 5;
     }`
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestWhile(t *testing.T) {
@@ -353,8 +330,8 @@ func TestWhile(t *testing.T) {
     num;
     `
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "5")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "5")
 }
 
 func TestFor(t *testing.T) {
@@ -368,8 +345,8 @@ func TestFor(t *testing.T) {
     total;
     `
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "10")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "10")
 }
 
 func TestForEach(t *testing.T) {
@@ -384,8 +361,8 @@ func TestForEach(t *testing.T) {
     total;
     `
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, "10")
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "10")
 }
 
 func TestForEachInvalid(t *testing.T) {
@@ -400,7 +377,7 @@ func TestForEachInvalid(t *testing.T) {
     total;
     `
 
-	test.AssertPanic(t, func() { RunIlang(input) })
+	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
 func TestStringConcat(t *testing.T) {
@@ -409,6 +386,6 @@ func TestStringConcat(t *testing.T) {
     a;
     `
 
-	res := RunIlang(input).PrintValue()
-	test.AssertStringsEqual(t, res, `"hi world"`)
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, `"hi world"`)
 }

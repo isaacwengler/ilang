@@ -1,4 +1,4 @@
-package types
+package library
 
 import (
 	"errors"
@@ -121,6 +121,10 @@ func (s IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 		err := errors.New("Arithmetic not supported between int and non-number type")
 		panic(err)
 	}
+}
+
+func (s IntValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
 }
 
 func NewIntValue(value int64) *IntValue {

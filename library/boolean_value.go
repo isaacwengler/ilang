@@ -1,4 +1,4 @@
-package types
+package library
 
 import (
 	"errors"
@@ -40,6 +40,10 @@ func (s BooleanValue) Equals(other WrappedValue) *BooleanValue {
 	default:
 		return NewBooleanValue(false)
 	}
+}
+
+func (s BooleanValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
 }
 
 func NewBooleanValue(value bool) *BooleanValue {

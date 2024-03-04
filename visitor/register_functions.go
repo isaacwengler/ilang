@@ -2,10 +2,10 @@ package visitor
 
 import (
 	"ilang/library"
-	"ilang/types"
+	library1 "ilang/library"
 )
 
 func (v *Visitor) registerGlobalFunctions() {
-	v.scope.SetVar("print", types.NewLibFunctionValue(library.Print, "print"))
-	v.scope.SetVar("println", types.NewLibFunctionValue(library.Println, "println"))
+	v.scope.SetVar("print", library1.NewLibFunctionValue(library.Print, "print"))
+	v.scope.SetVar("println", library1.NewLibFunctionValue(library.Println, "println"))
 }

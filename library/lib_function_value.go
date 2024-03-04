@@ -1,4 +1,4 @@
-package types
+package library
 
 import (
 	"errors"
@@ -27,6 +27,10 @@ func (s LibFunctionValue) Comparison(op string, other WrappedValue) *BooleanValu
 
 func (s LibFunctionValue) Call(args []WrappedValue) WrappedValue {
 	return s.f(args)
+}
+
+func (s LibFunctionValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
 }
 
 func NewLibFunctionValue(f func(args []WrappedValue) WrappedValue, name string) *LibFunctionValue {

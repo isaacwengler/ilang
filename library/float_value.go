@@ -1,4 +1,4 @@
-package types
+package library
 
 import (
 	"errors"
@@ -118,6 +118,11 @@ func (s FloatValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 		panic(err)
 	}
 }
+
+func (s FloatValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
+}
+
 
 func NewFloatValue(value float64) *FloatValue {
 	return &FloatValue{value}

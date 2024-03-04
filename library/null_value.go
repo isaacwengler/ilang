@@ -1,4 +1,4 @@
-package types
+package library
 
 import "errors"
 
@@ -32,6 +32,10 @@ func (s NullValue) Equals(other WrappedValue) *BooleanValue {
 	default:
 		return NewBooleanValue(false)
 	}
+}
+
+func (s NullValue) GetChild(key WrappedValue) WrappedValue {
+    return nil
 }
 
 func NewNullValue() *NullValue {
