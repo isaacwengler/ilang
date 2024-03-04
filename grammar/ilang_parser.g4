@@ -5,9 +5,9 @@ options { tokenVocab=ilang_lexer; }
 start: block EOF;
 
 block: (
-    expr SEMICOLON |
+    return |
     statement |
-    return
+    expr SEMICOLON 
 )+;
 
 statement: (
@@ -47,7 +47,7 @@ functionArgs: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
 
 assignment: LET SYMBOL EQUALS expr;
 
-reassignment: SYMBOL  EQUALS expr;
+reassignment: SYMBOL symbolChild? EQUALS expr;
 
 ifStatement: IF conditionBody scopeBody elseifStatement* elseStatement?;
 
@@ -71,7 +71,7 @@ not: NOT expr;
 
 symbol: SYMBOL;
 
-symbolChild: DOT SYMBOL | OPEN_BRACKET expr CLOSE_BRACKET;
+symbolChild: (DOT SYMBOL | OPEN_BRACKET expr CLOSE_BRACKET) symbolChild?;
 
 stringLiteral: STRING;
 

@@ -50,3 +50,12 @@ func TestArrayLengthComputed(t *testing.T) {
 	res := interpreter.RunIlang(input).PrintValue()
 	assertStringEquals(t, res, "4")
 }
+
+func TestArrayReassignment(t *testing.T) {
+	input := `let arr = [1, 2, 3, 4];
+    arr[2] = 15;
+    arr;`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "[1,2,15,4]")
+}

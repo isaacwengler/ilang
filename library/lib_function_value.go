@@ -33,6 +33,12 @@ func (s LibFunctionValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
+func (s LibFunctionValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on function value")
+	panic(err)
+}
+
+
 func NewLibFunctionValue(f func(args []WrappedValue) WrappedValue, name string) *LibFunctionValue {
 	return &LibFunctionValue{f, name}
 }

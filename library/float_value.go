@@ -120,9 +120,13 @@ func (s FloatValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 }
 
 func (s FloatValue) GetChild(key WrappedValue) WrappedValue {
-    return nil
+	return nil
 }
 
+func (s FloatValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on float value")
+	panic(err)
+}
 
 func NewFloatValue(value float64) *FloatValue {
 	return &FloatValue{value}

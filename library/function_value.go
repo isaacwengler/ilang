@@ -40,6 +40,11 @@ func (s FunctionValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
+func (s FunctionValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on function value")
+	panic(err)
+}
+
 func NewFunctionValue(args []string, def parser.IScopeBodyContext, outsideScope *Scope) *FunctionValue {
 	return &FunctionValue{args, def, outsideScope}
 }

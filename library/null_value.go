@@ -35,7 +35,12 @@ func (s NullValue) Equals(other WrappedValue) *BooleanValue {
 }
 
 func (s NullValue) GetChild(key WrappedValue) WrappedValue {
-    return nil
+	return nil
+}
+
+func (s NullValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on null value")
+	panic(err)
 }
 
 func NewNullValue() *NullValue {

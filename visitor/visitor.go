@@ -207,7 +207,19 @@ func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) library.
 func (v *Visitor) VisitReassignmentWrapped(ctx *parser.ReassignmentContext) library.WrappedValue {
 	symbol := ctx.SYMBOL().GetText()
 	value := v.VisitWrapped(ctx.Expr())
-	v.scope.ReassignVariable(symbol, value)
+
+	children := make([]library.WrappedValue, 0)
+	curr := ctx.SymbolChild()
+	for curr != nil {
+		if curr.SYMBOL() != nil {
+			children = append(children, library.NewStringValue(curr.SYMBOL().GetText()))
+		} else {
+			children = append(children, v.VisitWrapped(curr.Expr()))
+		}
+		curr = curr.SymbolChild()
+	}
+
+	v.scope.ReassignVariable(symbol, value, children)
 	return value
 }
 

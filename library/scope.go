@@ -37,16 +37,26 @@ func (s *Scope) ResolveVariable(name string) WrappedValue {
 	return s.ParentScope.ResolveVariable(name)
 }
 
-func (s *Scope) ReassignVariable(name string, val WrappedValue) {
-	_, ok := s.GetVar(name)
+func (s *Scope) ReassignVariable(name string, val WrappedValue, children []WrappedValue) {
+	curr, ok := s.GetVar(name)
 	if ok {
-		s.SetVar(name, val)
-		return
+		if len(children) == 0 {
+			s.SetVar(name, val)
+			return
+		}
+
+        for i, c := range children {
+            if i == len(children) - 1 {
+                curr.SetChild(c, val)
+                return
+            }
+            curr = curr.GetChild(c)
+        }
 	}
 
 	if s.ParentScope == nil {
 		err := errors.New("Attempting to reassign undefined variable '" + name + "'")
 		panic(err)
 	}
-	s.ParentScope.ReassignVariable(name, val)
+	s.ParentScope.ReassignVariable(name, val, children)
 }

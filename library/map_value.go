@@ -51,6 +51,12 @@ func (s MapValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
+func (s MapValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on map value")
+	panic(err)
+}
+
+
 func NewMapValue(value map[any]WrappedValue) *MapValue {
 	return &MapValue{value}
 }

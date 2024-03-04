@@ -127,6 +127,11 @@ func (s IntValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
+func (s IntValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on int value")
+	panic(err)
+}
+
 func NewIntValue(value int64) *IntValue {
 	return &IntValue{value}
 }

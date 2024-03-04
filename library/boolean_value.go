@@ -43,7 +43,12 @@ func (s BooleanValue) Equals(other WrappedValue) *BooleanValue {
 }
 
 func (s BooleanValue) GetChild(key WrappedValue) WrappedValue {
-    return nil
+	return nil
+}
+
+func (s BooleanValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on boolean value")
+	panic(err)
 }
 
 func NewBooleanValue(value bool) *BooleanValue {

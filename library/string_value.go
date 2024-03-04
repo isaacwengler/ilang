@@ -85,7 +85,12 @@ func (s StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 }
 
 func (s StringValue) GetChild(key WrappedValue) WrappedValue {
-    return nil
+	return nil
+}
+
+func (s StringValue) SetChild(key WrappedValue, value WrappedValue) {
+	err := errors.New("Cannot set child property on map value")
+	panic(err)
 }
 
 func NewStringValue(value string) *StringValue {

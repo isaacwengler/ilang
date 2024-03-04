@@ -55,6 +55,21 @@ func (s ArrayValue) GetChild(key WrappedValue) WrappedValue {
 	}
 }
 
+func (s ArrayValue) SetChild(key WrappedValue, value WrappedValue) {
+	switch key.(type) {
+	case *IntValue:
+		index := key.(*IntValue).GetValue()
+		if index < 0 || index >= int64(len(s.value)) {
+			err := errors.New("Array index out of bounds")
+			panic(err)
+		}
+		s.value[index] = value
+	default:
+		err := errors.New("Array property assignment only supported with int value")
+		panic(err)
+	}
+}
+
 func NewArrayValue(value []WrappedValue) *ArrayValue {
 	return &ArrayValue{value}
 }
