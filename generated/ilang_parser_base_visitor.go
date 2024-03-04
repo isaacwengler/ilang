@@ -68,6 +68,10 @@ func (v *Baseilang_parserVisitor) VisitFunctionCall(ctx *FunctionCallContext) in
 	return v.VisitChildren(ctx)
 }
 
+func (v *Baseilang_parserVisitor) VisitProperty(ctx *PropertyContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *Baseilang_parserVisitor) VisitSymbolExpr(ctx *SymbolExprContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -77,6 +81,10 @@ func (v *Baseilang_parserVisitor) VisitGroupingExpr(ctx *GroupingExprContext) in
 }
 
 func (v *Baseilang_parserVisitor) VisitBooleanAlgebra(ctx *BooleanAlgebraContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *Baseilang_parserVisitor) VisitComputedProperty(ctx *ComputedPropertyContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

@@ -28,3 +28,25 @@ func TestEqualsArrayPtr(t *testing.T) {
 	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
 
+func TestArrayIndex(t *testing.T) {
+	input := `let val = [1, 2, 3, 4];
+    val[2];`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "3")
+}
+
+func TestArrayLength(t *testing.T) {
+	input := `let val = [1, 2, 3, 4];
+    val.length();`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "4")
+}
+
+func TestArrayLengthComputed(t *testing.T) {
+	input := `[1, 2, 3, 4]["length"]();`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "4")
+}

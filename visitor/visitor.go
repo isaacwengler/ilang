@@ -205,9 +205,9 @@ func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) library.
 }
 
 func (v *Visitor) VisitReassignmentWrapped(ctx *parser.ReassignmentContext) library.WrappedValue {
-    // TODO support prop assignment: symbol := v.VisitWrapped(ctx.Symbol())
+	symbol := ctx.SYMBOL().GetText()
 	value := v.VisitWrapped(ctx.Expr())
-	v.scope.ReassignVariable(ctx.Symbol().SYMBOL().GetText(), value)
+	v.scope.ReassignVariable(symbol, value)
 	return value
 }
 
@@ -318,19 +318,7 @@ func (v *Visitor) VisitNotWrapped(ctx *parser.NotContext) library.WrappedValue {
 }
 
 func (v *Visitor) VisitSymbolWrapped(ctx *parser.SymbolContext) library.WrappedValue {
-    curr := v.scope.ResolveVariable(ctx.SYMBOL().GetText())
-    symbolChild := ctx.SymbolChild()
-    for symbolChild != nil {
-        if symbolChild.SYMBOL() != nil {
-            property := symbolChild.SYMBOL().GetText()
-            curr = curr.GetChild(library.NewStringValue(property))
-        } else {
-            computedProperty := v.VisitWrapped(symbolChild.Expr())
-            curr = curr.GetChild(computedProperty) 
-        }
-        symbolChild = symbolChild.SymbolChild()
-    }
-    return curr
+	return v.scope.ResolveVariable(ctx.SYMBOL().GetText())
 }
 
 func (v *Visitor) VisitStringLiteralWrapped(ctx *parser.StringLiteralContext) library.WrappedValue {
@@ -429,6 +417,18 @@ func evalCondition(c library.WrappedValue) bool {
 		err := errors.New("Condition body must have boolean value")
 		panic(err)
 	}
+}
+
+func (v *Visitor) VisitPropertyWrapped(ctx *parser.PropertyContext) library.WrappedValue {
+	curr := v.VisitWrapped(ctx.Expr())
+	property := ctx.SYMBOL().GetText()
+	return curr.GetChild(library.NewStringValue(property))
+}
+
+func (v *Visitor) VisitComputedPropertyWrapped(ctx *parser.ComputedPropertyContext) library.WrappedValue {
+	curr := v.VisitWrapped(ctx.Expr(0))
+	computedProperty := v.VisitWrapped(ctx.Expr(1))
+	return curr.GetChild(computedProperty)
 }
 
 func (v *Visitor) VisitSymbolChildWrapped(ctx *parser.SymbolChildContext) library.WrappedValue {

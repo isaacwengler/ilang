@@ -53,6 +53,9 @@ type ilang_parserVisitor interface {
 	// Visit a parse tree produced by ilang_parser#functionCall.
 	VisitFunctionCall(ctx *FunctionCallContext) interface{}
 
+	// Visit a parse tree produced by ilang_parser#property.
+	VisitProperty(ctx *PropertyContext) interface{}
+
 	// Visit a parse tree produced by ilang_parser#symbolExpr.
 	VisitSymbolExpr(ctx *SymbolExprContext) interface{}
 
@@ -61,6 +64,9 @@ type ilang_parserVisitor interface {
 
 	// Visit a parse tree produced by ilang_parser#booleanAlgebra.
 	VisitBooleanAlgebra(ctx *BooleanAlgebraContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#computedProperty.
+	VisitComputedProperty(ctx *ComputedPropertyContext) interface{}
 
 	// Visit a parse tree produced by ilang_parser#functionDef.
 	VisitFunctionDef(ctx *FunctionDefContext) interface{}

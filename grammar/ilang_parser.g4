@@ -34,7 +34,9 @@ expr:
     expr CONDITIONAL_OP expr #condition |
     expr ARITHMETIC_OP expr #arithmetic |
     expr BOOLEAN_OP expr #booleanAlgebra |
-    expr  functionArgs #functionCall
+    expr  functionArgs #functionCall |
+    expr DOT SYMBOL #property |
+    expr OPEN_BRACKET expr CLOSE_BRACKET #computedProperty
 ;
 
 functionDef: FUNC functionDefArgs scopeBody;
@@ -45,7 +47,7 @@ functionArgs: OPEN_PAREN ((args+=expr COMMA)* args+=expr)? CLOSE_PAREN;
 
 assignment: LET SYMBOL EQUALS expr;
 
-reassignment: symbol EQUALS expr;
+reassignment: SYMBOL  EQUALS expr;
 
 ifStatement: IF conditionBody scopeBody elseifStatement* elseStatement?;
 
@@ -67,9 +69,9 @@ conditionBody: OPEN_PAREN expr CLOSE_PAREN;
 
 not: NOT expr;
 
-symbol: SYMBOL symbolChild?;
+symbol: SYMBOL;
 
-symbolChild: (OPEN_BRACKET expr CLOSE_BRACKET | DOT SYMBOL) symbolChild?; 
+symbolChild: DOT SYMBOL | OPEN_BRACKET expr CLOSE_BRACKET;
 
 stringLiteral: STRING;
 

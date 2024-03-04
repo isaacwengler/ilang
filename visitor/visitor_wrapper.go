@@ -2,8 +2,8 @@ package visitor
 
 import (
 	parser "ilang/generated"
-	"ilang/logger"
 	"ilang/library"
+	"ilang/logger"
 
 	"github.com/antlr4-go/antlr/v4"
 )
@@ -236,7 +236,14 @@ func (v *Visitor) VisitGrouping(ctx *parser.GroupingContext) interface{} {
 	return v.VisitGroupingWrapped(ctx)
 }
 
+func (v *Visitor) VisitProperty(ctx *parser.PropertyContext) interface{} {
+	return v.VisitPropertyWrapped(ctx)
+}
+
+func (v *Visitor) VisitComputedProperty(ctx *parser.ComputedPropertyContext) interface{} {
+	return v.VisitComputedPropertyWrapped(ctx)
+}
+
 func (v *Visitor) VisitSymbolChild(ctx *parser.SymbolChildContext) interface{} {
 	return v.VisitSymbolChildWrapped(ctx)
 }
-
