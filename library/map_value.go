@@ -56,7 +56,6 @@ func (s MapValue) SetChild(key WrappedValue, value WrappedValue) {
 	panic(err)
 }
 
-
 func NewMapValue(value map[any]WrappedValue) *MapValue {
 	return &MapValue{value}
 }

@@ -59,3 +59,21 @@ func TestArrayReassignment(t *testing.T) {
 	res := interpreter.RunIlang(input).PrintValue()
 	assertStringEquals(t, res, "[1,2,15,4]")
 }
+
+func TestPush(t *testing.T) {
+	input := `let arr = [1, 2, 3, 4];
+    arr.push(5);
+    arr;`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "[1,2,3,4,5]")
+}
+
+func TestPop(t *testing.T) {
+	input := `let arr = [1, 2, 3, 4];
+    arr.pop();
+    arr;`
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "[1,2,3]")
+}

@@ -5,9 +5,15 @@ import (
 	"fmt"
 )
 
-func ValidateArgs(name string, expected int, recieved int) {
-	if expected != recieved {
-		err := errors.New("Function " + name + " expected " + fmt.Sprint(expected) + " arguments but got " + fmt.Sprint(recieved))
+func ValidateArgsBetween(name string, minArgs int, maxArgs int, recieved int) {
+	if recieved < minArgs || recieved > maxArgs {
+        var args string
+		if minArgs == maxArgs {
+			args = fmt.Sprint(minArgs)
+		} else {
+			args = fmt.Sprint(minArgs) + "-" + fmt.Sprint(maxArgs)
+		}
+		err := errors.New("Function " + name + " expected " + args +" arguments but got " + fmt.Sprint(recieved))
 		panic(err)
 	}
 }

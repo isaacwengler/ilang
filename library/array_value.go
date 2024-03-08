@@ -38,7 +38,7 @@ func (s ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s ArrayValue) GetChild(key WrappedValue) WrappedValue {
+func (s *ArrayValue) GetChild(key WrappedValue) WrappedValue {
 	switch key.(type) {
 	case *IntValue:
 		index := key.(*IntValue).GetValue()
@@ -48,14 +48,14 @@ func (s ArrayValue) GetChild(key WrappedValue) WrappedValue {
 		}
 		return s.value[index]
 	case *StringValue:
-		return makeArrayFunction(&s, key.(*StringValue).GetValue())
+		return makeArrayFunction(s, key.(*StringValue).GetValue())
 	default:
 		err := errors.New("Array indexing only supported with int and string values")
 		panic(err)
 	}
 }
 
-func (s ArrayValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *ArrayValue) SetChild(key WrappedValue, value WrappedValue) {
 	switch key.(type) {
 	case *IntValue:
 		index := key.(*IntValue).GetValue()
