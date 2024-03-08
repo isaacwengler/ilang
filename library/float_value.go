@@ -10,19 +10,19 @@ type FloatValue struct {
 	value float64
 }
 
-func (s FloatValue) IsWrappedValue() bool {
+func (s *FloatValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s FloatValue) PrintValue() string {
+func (s *FloatValue) PrintValue() string {
 	return strconv.FormatFloat(s.value, 'f', -1, 64)
 }
 
-func (s FloatValue) GetValue() float64 {
+func (s *FloatValue) GetValue() float64 {
 	return s.value
 }
 
-func (s FloatValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *FloatValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -42,7 +42,7 @@ func (s FloatValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s FloatValue) Equals(other WrappedValue) *BooleanValue {
+func (s *FloatValue) Equals(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() == float64(other.(*IntValue).GetValue()))
@@ -53,7 +53,7 @@ func (s FloatValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s FloatValue) LessThan(other WrappedValue) *BooleanValue {
+func (s *FloatValue) LessThan(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() < float64(other.(*IntValue).GetValue()))
@@ -65,7 +65,7 @@ func (s FloatValue) LessThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s FloatValue) GreaterThan(other WrappedValue) *BooleanValue {
+func (s *FloatValue) GreaterThan(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() > float64(other.(*IntValue).GetValue()))
@@ -77,7 +77,7 @@ func (s FloatValue) GreaterThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s FloatValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+func (s *FloatValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	switch other.(type) {
 	case *IntValue:
 		otherVal := other.(*IntValue).GetValue()
@@ -119,11 +119,11 @@ func (s FloatValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	}
 }
 
-func (s FloatValue) GetChild(key WrappedValue) WrappedValue {
+func (s *FloatValue) GetChild(key WrappedValue) WrappedValue {
 	return nil
 }
 
-func (s FloatValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *FloatValue) SetChild(key WrappedValue, value WrappedValue) {
 	err := errors.New("Cannot set child property on float value")
 	panic(err)
 }

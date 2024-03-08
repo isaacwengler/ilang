@@ -11,11 +11,11 @@ type FunctionValue struct {
 	ClosureScope *Scope
 }
 
-func (s FunctionValue) IsWrappedValue() bool {
+func (s *FunctionValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s FunctionValue) PrintValue() string {
+func (s *FunctionValue) PrintValue() string {
 	res := "func("
 	for i, arg := range s.Args {
 		res += arg
@@ -28,7 +28,7 @@ func (s FunctionValue) PrintValue() string {
 	return res
 }
 
-func (s FunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *FunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
 	default:
 		err := errors.New("operator '" + op + "' not supported for function type")
@@ -36,11 +36,11 @@ func (s FunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s FunctionValue) GetChild(key WrappedValue) WrappedValue {
+func (s *FunctionValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
-func (s FunctionValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *FunctionValue) SetChild(key WrappedValue, value WrappedValue) {
 	err := errors.New("Cannot set child property on function value")
 	panic(err)
 }

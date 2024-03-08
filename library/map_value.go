@@ -11,11 +11,11 @@ type MapValue struct {
 	value map[any]WrappedValue
 }
 
-func (s MapValue) IsWrappedValue() bool {
+func (s *MapValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s MapValue) PrintValue() string {
+func (s *MapValue) PrintValue() string {
 	res := "{"
 	for key, item := range s.value {
 		switch key.(type) {
@@ -39,7 +39,7 @@ func (s MapValue) PrintValue() string {
 	return res
 }
 
-func (s MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
 	default:
 		err := errors.New("operator '" + op + "' not supported for map type")
@@ -47,11 +47,11 @@ func (s MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s MapValue) GetChild(key WrappedValue) WrappedValue {
+func (s *MapValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
-func (s MapValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *MapValue) SetChild(key WrappedValue, value WrappedValue) {
 	err := errors.New("Cannot set child property on map value")
 	panic(err)
 }

@@ -10,19 +10,19 @@ type IntValue struct {
 	value int64
 }
 
-func (s IntValue) IsWrappedValue() bool {
+func (s *IntValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s IntValue) PrintValue() string {
+func (s *IntValue) PrintValue() string {
 	return strconv.FormatInt(s.value, 10)
 }
 
-func (s IntValue) GetValue() int64 {
+func (s *IntValue) GetValue() int64 {
 	return s.value
 }
 
-func (s IntValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *IntValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -42,7 +42,7 @@ func (s IntValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s IntValue) Equals(other WrappedValue) *BooleanValue {
+func (s *IntValue) Equals(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() == other.(*IntValue).GetValue())
@@ -53,7 +53,7 @@ func (s IntValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s IntValue) LessThan(other WrappedValue) *BooleanValue {
+func (s *IntValue) LessThan(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() < other.(*IntValue).GetValue())
@@ -65,7 +65,7 @@ func (s IntValue) LessThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s IntValue) GreaterThan(other WrappedValue) *BooleanValue {
+func (s *IntValue) GreaterThan(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() > other.(*IntValue).GetValue())
@@ -77,7 +77,7 @@ func (s IntValue) GreaterThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+func (s *IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	switch other.(type) {
 	case *IntValue:
 		otherVal := other.(*IntValue).GetValue()
@@ -123,11 +123,11 @@ func (s IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	}
 }
 
-func (s IntValue) GetChild(key WrappedValue) WrappedValue {
+func (s *IntValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
-func (s IntValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *IntValue) SetChild(key WrappedValue, value WrappedValue) {
 	err := errors.New("Cannot set child property on int value")
 	panic(err)
 }

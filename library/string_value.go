@@ -6,19 +6,19 @@ type StringValue struct {
 	value string
 }
 
-func (s StringValue) IsWrappedValue() bool {
+func (s *StringValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s StringValue) PrintValue() string {
+func (s *StringValue) PrintValue() string {
 	return `"` + s.value + `"`
 }
 
-func (s StringValue) GetValue() string {
+func (s *StringValue) GetValue() string {
 	return s.value
 }
 
-func (s StringValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *StringValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -38,7 +38,7 @@ func (s StringValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s StringValue) Equals(other WrappedValue) *BooleanValue {
+func (s *StringValue) Equals(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *StringValue:
 		return NewBooleanValue(s.GetValue() == other.(*StringValue).GetValue())
@@ -47,7 +47,7 @@ func (s StringValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s StringValue) LessThan(other WrappedValue) *BooleanValue {
+func (s *StringValue) LessThan(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *StringValue:
 		return NewBooleanValue(s.GetValue() < other.(*StringValue).GetValue())
@@ -57,7 +57,7 @@ func (s StringValue) LessThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s StringValue) GreaterThan(other WrappedValue) *BooleanValue {
+func (s *StringValue) GreaterThan(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *StringValue:
 		return NewBooleanValue(s.GetValue() > other.(*StringValue).GetValue())
@@ -67,7 +67,7 @@ func (s StringValue) GreaterThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+func (s *StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	switch other.(type) {
 	case *StringValue:
 		otherVal := other.(*StringValue).GetValue()
@@ -84,11 +84,11 @@ func (s StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	}
 }
 
-func (s StringValue) GetChild(key WrappedValue) WrappedValue {
+func (s *StringValue) GetChild(key WrappedValue) WrappedValue {
 	return nil
 }
 
-func (s StringValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *StringValue) SetChild(key WrappedValue, value WrappedValue) {
 	err := errors.New("Cannot set child property on map value")
 	panic(err)
 }

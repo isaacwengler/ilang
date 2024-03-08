@@ -5,15 +5,15 @@ import "errors"
 type NullValue struct {
 }
 
-func (s NullValue) IsWrappedValue() bool {
+func (s *NullValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s NullValue) PrintValue() string {
+func (s *NullValue) PrintValue() string {
 	return "null"
 }
 
-func (s NullValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *NullValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -25,7 +25,7 @@ func (s NullValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s NullValue) Equals(other WrappedValue) *BooleanValue {
+func (s *NullValue) Equals(other WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *NullValue:
 		return NewBooleanValue(true)
@@ -34,11 +34,11 @@ func (s NullValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s NullValue) GetChild(key WrappedValue) WrappedValue {
+func (s *NullValue) GetChild(key WrappedValue) WrappedValue {
 	return nil
 }
 
-func (s NullValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *NullValue) SetChild(key WrappedValue, value WrappedValue) {
 	err := errors.New("Cannot set child property on null value")
 	panic(err)
 }

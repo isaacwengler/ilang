@@ -9,15 +9,15 @@ type LibFunctionValue struct {
 	name string
 }
 
-func (s LibFunctionValue) IsWrappedValue() bool {
+func (s *LibFunctionValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s LibFunctionValue) PrintValue() string {
+func (s *LibFunctionValue) PrintValue() string {
 	return "func " + s.name
 }
 
-func (s LibFunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *LibFunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	switch op {
 	default:
 		err := errors.New("operator '" + op + "' not supported for library function type")
@@ -25,15 +25,15 @@ func (s LibFunctionValue) Comparison(op string, other WrappedValue) *BooleanValu
 	}
 }
 
-func (s LibFunctionValue) Call(args []WrappedValue) WrappedValue {
+func (s *LibFunctionValue) Call(args []WrappedValue) WrappedValue {
 	return s.f(args)
 }
 
-func (s LibFunctionValue) GetChild(key WrappedValue) WrappedValue {
+func (s *LibFunctionValue) GetChild(key WrappedValue) WrappedValue {
     return nil
 }
 
-func (s LibFunctionValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *LibFunctionValue) SetChild(key WrappedValue, value WrappedValue) {
 	err := errors.New("Cannot set child property on function value")
 	panic(err)
 }
