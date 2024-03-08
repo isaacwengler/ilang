@@ -48,12 +48,34 @@ func (s *MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
 }
 
 func (s *MapValue) GetChild(key WrappedValue) WrappedValue {
-    return nil
+	switch key.(type) {
+	case *IntValue:
+		index := key.(*IntValue).GetValue()
+		val, ok := s.value[index]
+		if !ok {
+			return NewNullValue()
+		}
+		return val
+	case *StringValue:
+		f, ok := makeMapFunction(s, key.(*StringValue).GetValue())
+		if ok {
+			return f
+		}
+
+		index := key.(*StringValue).GetValue()
+		val, ok := s.value[index]
+		if !ok {
+			return NewNullValue()
+		}
+		return val
+	default:
+		err := errors.New("Map indexing only supported with int and string values")
+		panic(err)
+	}
 }
 
 func (s *MapValue) SetChild(key WrappedValue, value WrappedValue) {
-	err := errors.New("Cannot set child property on map value")
-	panic(err)
+	set(s, []WrappedValue{key, value})
 }
 
 func NewMapValue(value map[any]WrappedValue) *MapValue {
