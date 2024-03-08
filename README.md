@@ -50,9 +50,10 @@ go run .
 - ~~function definition type~~
 - ~~implement function call~~
 - ~~command line with file and interactive mode~~
-- map/array indexing
+- ~~map/array indexing~~
 - handle early returns
 - custom error stat https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
 - imports/exports
 - standard functions on wrapped value
+- fix bug where (i < nums.length()) tries to do i < nums before nums.length()
 - simple package manager (un-versioned git repo curls? maybe)

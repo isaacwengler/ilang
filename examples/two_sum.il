@@ -1,14 +1,19 @@
 let twoSum = func(nums, target) {
-    let seen = {}
-    for (let i = 0; i < seen.length(); i = i + 1) {
-        let num = nums[i]
-        if (seen[num - target] != null) {
-            return [seen[num - target], i]
+    let seen = {};
+    let ans = [-1, -1];
+    for (let i = 0; i < (nums.length()); i = i + 1) {
+        let num = nums[i];
+        if (seen[target - num] != null) {
+            ans = [seen[target - num], i];
         }
         seen[num] = i;
     }
+    return ans;
 };
 
-let res = twoSum([2, 7, 11, 15], 9)
-// expect [0, 1]
-print(res)
+let a = [];
+for (let i = 0; i < 100000; i = i + 1) {
+    a.push(i);
+}
+let res = twoSum(a, 5892);
+println("result", res);
