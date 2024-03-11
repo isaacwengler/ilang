@@ -2,8 +2,8 @@ package visitor
 
 import (
 	parser "ilang/generated"
-	"ilang/library"
 	"ilang/logger"
+	"ilang/model"
 
 	"github.com/antlr4-go/antlr/v4"
 )
@@ -19,22 +19,22 @@ import (
  * TODO: move off antlr? It seems not best suited for go
  */
 
-func (v *Visitor) VisitWrapped(t antlr.ParseTree) library.WrappedValue {
+func (v *Visitor) VisitWrapped(t antlr.ParseTree) model.WrappedValue {
 	val := v.Visit(t)
 	if val == nil {
 		logger.Warn("VisitWrapped got nil return value")
 		return nil
 	}
-	return val.(library.WrappedValue)
+	return val.(model.WrappedValue)
 }
 
-func (v *Visitor) VisitChildrenWrapped(node antlr.RuleNode) library.WrappedValue {
+func (v *Visitor) VisitChildrenWrapped(node antlr.RuleNode) model.WrappedValue {
 	val := v.VisitChildren(node)
 	if val == nil {
 		logger.Warn("VisitChildrenWrapped got nil return value")
 		return nil
 	}
-	return val.(library.WrappedValue)
+	return val.(model.WrappedValue)
 }
 
 func (v *Visitor) Visit(t antlr.ParseTree) interface{} {

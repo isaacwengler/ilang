@@ -5,6 +5,7 @@ import (
 	parser "ilang/generated"
 	"ilang/library"
 	"ilang/logger"
+	"ilang/model"
 	"strconv"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -22,39 +23,39 @@ type Visitor struct {
 	scope *library.Scope
 }
 
-func (v *Visitor) VisitStartWrapped(ctx *parser.StartContext) library.WrappedValue {
+func (v *Visitor) VisitStartWrapped(ctx *parser.StartContext) model.WrappedValue {
 	return v.VisitWrapped(ctx.Block())
 }
 
-func (v *Visitor) VisitBlockWrapped(ctx *parser.BlockContext) library.WrappedValue {
+func (v *Visitor) VisitBlockWrapped(ctx *parser.BlockContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitStatementWrapped(ctx *parser.StatementContext) library.WrappedValue {
+func (v *Visitor) VisitStatementWrapped(ctx *parser.StatementContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitIntExprWrapped(ctx *parser.IntExprContext) library.WrappedValue {
+func (v *Visitor) VisitIntExprWrapped(ctx *parser.IntExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitNullExprWrapped(ctx *parser.NullExprContext) library.WrappedValue {
+func (v *Visitor) VisitNullExprWrapped(ctx *parser.NullExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitArrayExprWrapped(ctx *parser.ArrayExprContext) library.WrappedValue {
+func (v *Visitor) VisitArrayExprWrapped(ctx *parser.ArrayExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitBooleanExprWrapped(ctx *parser.BooleanExprContext) library.WrappedValue {
+func (v *Visitor) VisitBooleanExprWrapped(ctx *parser.BooleanExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitMapExprWrapped(ctx *parser.MapExprContext) library.WrappedValue {
+func (v *Visitor) VisitMapExprWrapped(ctx *parser.MapExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitArithmeticWrapped(ctx *parser.ArithmeticContext) library.WrappedValue {
+func (v *Visitor) VisitArithmeticWrapped(ctx *parser.ArithmeticContext) model.WrappedValue {
 	first := v.VisitWrapped(ctx.Expr(0))
 	second := v.VisitWrapped(ctx.Expr(1))
 	op := ctx.ARITHMETIC_OP().GetText()
@@ -72,30 +73,30 @@ func (v *Visitor) VisitArithmeticWrapped(ctx *parser.ArithmeticContext) library.
 	}
 }
 
-func (v *Visitor) VisitStringExprWrapped(ctx *parser.StringExprContext) library.WrappedValue {
+func (v *Visitor) VisitStringExprWrapped(ctx *parser.StringExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitFloatExprWrapped(ctx *parser.FloatExprContext) library.WrappedValue {
+func (v *Visitor) VisitFloatExprWrapped(ctx *parser.FloatExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitConditionWrapped(ctx *parser.ConditionContext) library.WrappedValue {
+func (v *Visitor) VisitConditionWrapped(ctx *parser.ConditionContext) model.WrappedValue {
 	first := v.VisitWrapped(ctx.Expr(0))
 	second := v.VisitWrapped(ctx.Expr(1))
 
 	return first.Comparison(ctx.CONDITIONAL_OP().GetText(), second)
 }
 
-func (v *Visitor) VisitNotExprWrapped(ctx *parser.NotExprContext) library.WrappedValue {
+func (v *Visitor) VisitNotExprWrapped(ctx *parser.NotExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitFunctionDefExprWrapped(ctx *parser.FunctionDefExprContext) library.WrappedValue {
+func (v *Visitor) VisitFunctionDefExprWrapped(ctx *parser.FunctionDefExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) library.WrappedValue {
+func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) model.WrappedValue {
 	expr := v.VisitWrapped(ctx.Expr())
 	switch expr.(type) {
 	case *library.FunctionValue:
@@ -107,9 +108,6 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) libr
 
 		argsCtx := ctx.FunctionArgs().GetArgs()
 		if len(argsCtx) != len(function.Args) {
-			logger.Error(len(argsCtx), len(function.Args))
-			logger.Error(argsCtx)
-			logger.Error(function.Args)
 			err := errors.New("Received different number of args than expected")
 			panic(err)
 		}
@@ -124,7 +122,7 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) libr
 		return res
 	case *library.LibFunctionValue:
 		argsCtx := ctx.FunctionArgs().GetArgs()
-		args := make([]library.WrappedValue, len(argsCtx))
+		args := make([]model.WrappedValue, len(argsCtx))
 		for i, a := range argsCtx {
 			args[i] = v.VisitWrapped(a)
 		}
@@ -135,15 +133,15 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) libr
 	}
 }
 
-func (v *Visitor) VisitSymbolExprWrapped(ctx *parser.SymbolExprContext) library.WrappedValue {
+func (v *Visitor) VisitSymbolExprWrapped(ctx *parser.SymbolExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitGroupingExprWrapped(ctx *parser.GroupingExprContext) library.WrappedValue {
+func (v *Visitor) VisitGroupingExprWrapped(ctx *parser.GroupingExprContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitBooleanAlgebraWrapped(ctx *parser.BooleanAlgebraContext) library.WrappedValue {
+func (v *Visitor) VisitBooleanAlgebraWrapped(ctx *parser.BooleanAlgebraContext) model.WrappedValue {
 	first := v.VisitWrapped(ctx.Expr(0))
 	second := v.VisitWrapped(ctx.Expr(1))
 	op := ctx.BOOLEAN_OP().GetText()
@@ -178,7 +176,7 @@ func (v *Visitor) VisitBooleanAlgebraWrapped(ctx *parser.BooleanAlgebraContext) 
 	}
 }
 
-func (v *Visitor) VisitFunctionDefWrapped(ctx *parser.FunctionDefContext) library.WrappedValue {
+func (v *Visitor) VisitFunctionDefWrapped(ctx *parser.FunctionDefContext) model.WrappedValue {
 	symbols := ctx.FunctionDefArgs().AllSYMBOL()
 	args := make([]string, len(symbols))
 	for i, s := range symbols {
@@ -188,11 +186,11 @@ func (v *Visitor) VisitFunctionDefWrapped(ctx *parser.FunctionDefContext) librar
 	return library.NewFunctionValue(args, ctx.ScopeBody(), v.scope)
 }
 
-func (v *Visitor) VisitFunctionArgsWrapped(ctx *parser.FunctionArgsContext) library.WrappedValue {
+func (v *Visitor) VisitFunctionArgsWrapped(ctx *parser.FunctionArgsContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) library.WrappedValue {
+func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) model.WrappedValue {
 	variable := ctx.SYMBOL().GetText()
 	value := v.VisitWrapped(ctx.Expr())
 
@@ -204,11 +202,11 @@ func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) library.
 	return value
 }
 
-func (v *Visitor) VisitReassignmentWrapped(ctx *parser.ReassignmentContext) library.WrappedValue {
+func (v *Visitor) VisitReassignmentWrapped(ctx *parser.ReassignmentContext) model.WrappedValue {
 	symbol := ctx.SYMBOL().GetText()
 	value := v.VisitWrapped(ctx.Expr())
 
-	children := make([]library.WrappedValue, 0)
+	children := make([]model.WrappedValue, 0)
 	curr := ctx.SymbolChild()
 	for curr != nil {
 		if curr.SYMBOL() != nil {
@@ -223,7 +221,7 @@ func (v *Visitor) VisitReassignmentWrapped(ctx *parser.ReassignmentContext) libr
 	return value
 }
 
-func (v *Visitor) VisitIfStatementWrapped(ctx *parser.IfStatementContext) library.WrappedValue {
+func (v *Visitor) VisitIfStatementWrapped(ctx *parser.IfStatementContext) model.WrappedValue {
 	condition := evalCondition(v.VisitWrapped(ctx.ConditionBody()))
 	if condition {
 		return v.VisitWrapped(ctx.ScopeBody())
@@ -243,15 +241,15 @@ func (v *Visitor) VisitIfStatementWrapped(ctx *parser.IfStatementContext) librar
 	return library.NewNullValue()
 }
 
-func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) library.WrappedValue {
-	var last library.WrappedValue = library.NewNullValue()
+func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) model.WrappedValue {
+	var last model.WrappedValue = library.NewNullValue()
 	for evalCondition(v.VisitWrapped(ctx.ConditionBody())) {
 		last = v.VisitWrapped(ctx.ScopeBody())
 	}
 	return last
 }
 
-func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) library.WrappedValue {
+func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) model.WrappedValue {
 	logger.Debug("pushing new scope for foreach variables")
 	v.scope = library.NewScope(v.scope)
 
@@ -259,7 +257,7 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) librar
 	switch expr.(type) {
 	case *library.ArrayValue:
 		items := expr.(*library.ArrayValue).GetValue()
-		var last library.WrappedValue = library.NewNullValue()
+		var last model.WrappedValue = library.NewNullValue()
 		for _, item := range items {
 			v.scope.SetVar(ctx.SYMBOL().GetText(), item)
 			last = v.VisitWrapped(ctx.ScopeBody())
@@ -274,12 +272,12 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) librar
 	}
 }
 
-func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) library.WrappedValue {
+func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) model.WrappedValue {
 	logger.Debug("pushing new scope for for variables")
 	v.scope = library.NewScope(v.scope)
 
 	v.VisitWrapped(ctx.GetInit())
-	var last library.WrappedValue = library.NewNullValue()
+	var last model.WrappedValue = library.NewNullValue()
 	for evalCondition(v.VisitWrapped(ctx.GetCond())) {
 		last = v.VisitWrapped(ctx.ScopeBody())
 		v.VisitWrapped(ctx.GetStep())
@@ -290,19 +288,19 @@ func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) library.Wrappe
 	return last
 }
 
-func (v *Visitor) VisitReturnWrapped(ctx *parser.ReturnContext) library.WrappedValue {
+func (v *Visitor) VisitReturnWrapped(ctx *parser.ReturnContext) model.WrappedValue {
 	return v.VisitWrapped(ctx.Expr())
 }
 
-func (v *Visitor) VisitElseifStatementWrapped(ctx *parser.ElseifStatementContext) library.WrappedValue {
+func (v *Visitor) VisitElseifStatementWrapped(ctx *parser.ElseifStatementContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitElseStatementWrapped(ctx *parser.ElseStatementContext) library.WrappedValue {
+func (v *Visitor) VisitElseStatementWrapped(ctx *parser.ElseStatementContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitScopeBodyWrapped(ctx *parser.ScopeBodyContext) library.WrappedValue {
+func (v *Visitor) VisitScopeBodyWrapped(ctx *parser.ScopeBodyContext) model.WrappedValue {
 	logger.Debug("pushing new scope")
 	v.scope = library.NewScope(v.scope)
 
@@ -313,11 +311,11 @@ func (v *Visitor) VisitScopeBodyWrapped(ctx *parser.ScopeBodyContext) library.Wr
 	return val
 }
 
-func (v *Visitor) VisitConditionBodyWrapped(ctx *parser.ConditionBodyContext) library.WrappedValue {
+func (v *Visitor) VisitConditionBodyWrapped(ctx *parser.ConditionBodyContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitNotWrapped(ctx *parser.NotContext) library.WrappedValue {
+func (v *Visitor) VisitNotWrapped(ctx *parser.NotContext) model.WrappedValue {
 	expr := v.VisitWrapped(ctx.Expr())
 	switch expr.(type) {
 	case *library.BooleanValue:
@@ -329,17 +327,17 @@ func (v *Visitor) VisitNotWrapped(ctx *parser.NotContext) library.WrappedValue {
 	}
 }
 
-func (v *Visitor) VisitSymbolWrapped(ctx *parser.SymbolContext) library.WrappedValue {
+func (v *Visitor) VisitSymbolWrapped(ctx *parser.SymbolContext) model.WrappedValue {
 	return v.scope.ResolveVariable(ctx.SYMBOL().GetText())
 }
 
-func (v *Visitor) VisitStringLiteralWrapped(ctx *parser.StringLiteralContext) library.WrappedValue {
+func (v *Visitor) VisitStringLiteralWrapped(ctx *parser.StringLiteralContext) model.WrappedValue {
 	stringWithQuotes := ctx.STRING().GetText()
 	val := stringWithQuotes[1 : len(stringWithQuotes)-1]
 	return library.NewStringValue(val)
 }
 
-func (v *Visitor) VisitIntLiteralWrapped(ctx *parser.IntLiteralContext) library.WrappedValue {
+func (v *Visitor) VisitIntLiteralWrapped(ctx *parser.IntLiteralContext) model.WrappedValue {
 	val, err := strconv.ParseInt(ctx.GetText(), 0, 64)
 	if err != nil {
 		logger.Error("could not parse int", ctx.GetText(), err.Error())
@@ -348,7 +346,7 @@ func (v *Visitor) VisitIntLiteralWrapped(ctx *parser.IntLiteralContext) library.
 	return library.NewIntValue(val)
 }
 
-func (v *Visitor) VisitFloatLiteralWrapped(ctx *parser.FloatLiteralContext) library.WrappedValue {
+func (v *Visitor) VisitFloatLiteralWrapped(ctx *parser.FloatLiteralContext) model.WrappedValue {
 	val, err := strconv.ParseFloat(ctx.GetText(), 64)
 	if err != nil {
 		logger.Error("could not parse float", ctx.GetText(), err.Error())
@@ -357,19 +355,19 @@ func (v *Visitor) VisitFloatLiteralWrapped(ctx *parser.FloatLiteralContext) libr
 	return library.NewFloatValue(val)
 }
 
-func (v *Visitor) VisitNullLiteralWrapped(ctx *parser.NullLiteralContext) library.WrappedValue {
+func (v *Visitor) VisitNullLiteralWrapped(ctx *parser.NullLiteralContext) model.WrappedValue {
 	return library.NewNullValue()
 }
 
-func (v *Visitor) VisitBooleanLiteralWrapped(ctx *parser.BooleanLiteralContext) library.WrappedValue {
+func (v *Visitor) VisitBooleanLiteralWrapped(ctx *parser.BooleanLiteralContext) model.WrappedValue {
 	if ctx.TRUE() != nil {
 		return library.NewBooleanValue(true)
 	}
 	return library.NewBooleanValue(false)
 }
 
-func (v *Visitor) VisitArrayLiteralWrapped(ctx *parser.ArrayLiteralContext) library.WrappedValue {
-	arr := []library.WrappedValue{}
+func (v *Visitor) VisitArrayLiteralWrapped(ctx *parser.ArrayLiteralContext) model.WrappedValue {
+	arr := []model.WrappedValue{}
 	items := ctx.GetItems()
 	if items != nil {
 		for _, item := range ctx.GetItems() {
@@ -379,8 +377,8 @@ func (v *Visitor) VisitArrayLiteralWrapped(ctx *parser.ArrayLiteralContext) libr
 	return library.NewArrayValue(arr)
 }
 
-func (v *Visitor) VisitMapLiteralWrapped(ctx *parser.MapLiteralContext) library.WrappedValue {
-	m := make(map[any]library.WrappedValue)
+func (v *Visitor) VisitMapLiteralWrapped(ctx *parser.MapLiteralContext) model.WrappedValue {
+	m := make(map[any]model.WrappedValue)
 
 	items := ctx.GetItems()
 	if items != nil {
@@ -406,22 +404,22 @@ func (v *Visitor) VisitMapLiteralWrapped(ctx *parser.MapLiteralContext) library.
 	return library.NewMapValue(m)
 }
 
-func (v *Visitor) VisitMapLiteralItemWrapped(ctx *parser.MapLiteralItemContext) library.WrappedValue {
+func (v *Visitor) VisitMapLiteralItemWrapped(ctx *parser.MapLiteralItemContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }
 
-func (v *Visitor) VisitMapKeyWrapped(ctx *parser.MapKeyContext) library.WrappedValue {
+func (v *Visitor) VisitMapKeyWrapped(ctx *parser.MapKeyContext) model.WrappedValue {
 	if ctx.SYMBOL() != nil {
 		return library.NewStringValue(ctx.SYMBOL().GetText())
 	}
 	return v.VisitWrapped(ctx.Expr())
 }
 
-func (v *Visitor) VisitGroupingWrapped(ctx *parser.GroupingContext) library.WrappedValue {
+func (v *Visitor) VisitGroupingWrapped(ctx *parser.GroupingContext) model.WrappedValue {
 	return v.VisitWrapped(ctx.Expr())
 }
 
-func evalCondition(c library.WrappedValue) bool {
+func evalCondition(c model.WrappedValue) bool {
 	switch c.(type) {
 	case *library.BooleanValue:
 		return c.(*library.BooleanValue).GetValue()
@@ -431,18 +429,18 @@ func evalCondition(c library.WrappedValue) bool {
 	}
 }
 
-func (v *Visitor) VisitPropertyWrapped(ctx *parser.PropertyContext) library.WrappedValue {
+func (v *Visitor) VisitPropertyWrapped(ctx *parser.PropertyContext) model.WrappedValue {
 	curr := v.VisitWrapped(ctx.Expr())
 	property := ctx.SYMBOL().GetText()
 	return curr.GetChild(library.NewStringValue(property))
 }
 
-func (v *Visitor) VisitComputedPropertyWrapped(ctx *parser.ComputedPropertyContext) library.WrappedValue {
+func (v *Visitor) VisitComputedPropertyWrapped(ctx *parser.ComputedPropertyContext) model.WrappedValue {
 	curr := v.VisitWrapped(ctx.Expr(0))
 	computedProperty := v.VisitWrapped(ctx.Expr(1))
 	return curr.GetChild(computedProperty)
 }
 
-func (v *Visitor) VisitSymbolChildWrapped(ctx *parser.SymbolChildContext) library.WrappedValue {
+func (v *Visitor) VisitSymbolChildWrapped(ctx *parser.SymbolChildContext) model.WrappedValue {
 	return v.VisitChildrenWrapped(ctx)
 }

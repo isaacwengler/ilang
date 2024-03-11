@@ -3,13 +3,13 @@ package interpreter
 import (
 	parser "ilang/generated"
 	"ilang/logger"
-	"ilang/library"
+	"ilang/model"
 	"ilang/visitor"
 
 	"github.com/antlr4-go/antlr/v4"
 )
 
-func RunIlang(input string) library.WrappedValue {
+func RunIlang(input string) model.WrappedValue {
 	inputStream := antlr.NewInputStream(input)
 
 	lexer := parser.Newilang_lexer(inputStream)

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math"
 	"strconv"
+    "ilang/model"
 )
 
 type FloatValue struct {
@@ -22,7 +23,7 @@ func (s *FloatValue) GetValue() float64 {
 	return s.value
 }
 
-func (s *FloatValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *FloatValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -42,7 +43,7 @@ func (s *FloatValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *FloatValue) Equals(other WrappedValue) *BooleanValue {
+func (s *FloatValue) Equals(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() == float64(other.(*IntValue).GetValue()))
@@ -53,7 +54,7 @@ func (s *FloatValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *FloatValue) LessThan(other WrappedValue) *BooleanValue {
+func (s *FloatValue) LessThan(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() < float64(other.(*IntValue).GetValue()))
@@ -65,7 +66,7 @@ func (s *FloatValue) LessThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *FloatValue) GreaterThan(other WrappedValue) *BooleanValue {
+func (s *FloatValue) GreaterThan(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() > float64(other.(*IntValue).GetValue()))
@@ -77,7 +78,7 @@ func (s *FloatValue) GreaterThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *FloatValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+func (s *FloatValue) Arithmetic(op string, other model.WrappedValue) model.WrappedValue {
 	switch other.(type) {
 	case *IntValue:
 		otherVal := other.(*IntValue).GetValue()
@@ -119,11 +120,12 @@ func (s *FloatValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	}
 }
 
-func (s *FloatValue) GetChild(key WrappedValue) WrappedValue {
-	return nil
+func (s *FloatValue) GetChild(key model.WrappedValue) model.WrappedValue {
+	err := errors.New("float value does not have children")
+	panic(err)
 }
 
-func (s *FloatValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *FloatValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 	err := errors.New("Cannot set child property on float value")
 	panic(err)
 }

@@ -1,6 +1,9 @@
 package library
 
-import "errors"
+import (
+	"errors"
+	"ilang/model"
+)
 
 type StringValue struct {
 	value string
@@ -18,7 +21,7 @@ func (s *StringValue) GetValue() string {
 	return s.value
 }
 
-func (s *StringValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *StringValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -38,7 +41,7 @@ func (s *StringValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *StringValue) Equals(other WrappedValue) *BooleanValue {
+func (s *StringValue) Equals(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *StringValue:
 		return NewBooleanValue(s.GetValue() == other.(*StringValue).GetValue())
@@ -47,7 +50,7 @@ func (s *StringValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *StringValue) LessThan(other WrappedValue) *BooleanValue {
+func (s *StringValue) LessThan(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *StringValue:
 		return NewBooleanValue(s.GetValue() < other.(*StringValue).GetValue())
@@ -57,7 +60,7 @@ func (s *StringValue) LessThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *StringValue) GreaterThan(other WrappedValue) *BooleanValue {
+func (s *StringValue) GreaterThan(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *StringValue:
 		return NewBooleanValue(s.GetValue() > other.(*StringValue).GetValue())
@@ -67,7 +70,7 @@ func (s *StringValue) GreaterThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+func (s *StringValue) Arithmetic(op string, other model.WrappedValue) model.WrappedValue {
 	switch other.(type) {
 	case *StringValue:
 		otherVal := other.(*StringValue).GetValue()
@@ -84,12 +87,25 @@ func (s *StringValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	}
 }
 
-func (s *StringValue) GetChild(key WrappedValue) WrappedValue {
-	return nil
+func (s *StringValue) GetChild(key model.WrappedValue) model.WrappedValue {
+	switch key.(type) {
+	case *IntValue:
+		index := key.(*IntValue).GetValue()
+		if index < 0 || index >= int64(len(s.value)) {
+			err := errors.New("String index out of bounds")
+			panic(err)
+		}
+		return NewStringValue(string(s.value[index]))
+	case *StringValue:
+		return makeStringFunction(s, key.(*StringValue).GetValue())
+	default:
+		err := errors.New("string indexing only supported with int and string values")
+		panic(err)
+	}
 }
 
-func (s *StringValue) SetChild(key WrappedValue, value WrappedValue) {
-	err := errors.New("Cannot set child property on map value")
+func (s *StringValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
+	err := errors.New("Cannot set child property on string value")
 	panic(err)
 }
 

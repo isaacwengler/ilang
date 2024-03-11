@@ -2,6 +2,7 @@ package library
 
 import (
 	"errors"
+	"ilang/model"
 	"strconv"
 )
 
@@ -21,7 +22,7 @@ func (s *BooleanValue) GetValue() bool {
 	return s.value
 }
 
-func (s *BooleanValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *BooleanValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -33,7 +34,7 @@ func (s *BooleanValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *BooleanValue) Equals(other WrappedValue) *BooleanValue {
+func (s *BooleanValue) Equals(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *BooleanValue:
 		return NewBooleanValue(s.GetValue() == other.(*BooleanValue).GetValue())
@@ -42,11 +43,12 @@ func (s *BooleanValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *BooleanValue) GetChild(key WrappedValue) WrappedValue {
-	return nil
+func (s *BooleanValue) GetChild(key model.WrappedValue) model.WrappedValue {
+	err := errors.New("boolean value does not have children")
+	panic(err)
 }
 
-func (s *BooleanValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *BooleanValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 	err := errors.New("Cannot set child property on boolean value")
 	panic(err)
 }

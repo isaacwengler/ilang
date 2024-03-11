@@ -2,28 +2,29 @@ package library
 
 import (
 	"errors"
+    "ilang/model"
 )
 
 func NewScope(parentScope *Scope) *Scope {
-	m := make(map[string]WrappedValue)
+	m := make(map[string]model.WrappedValue)
 	return &Scope{parentScope, &m}
 }
 
 type Scope struct {
 	ParentScope *Scope
-	variables   *map[string]WrappedValue
+	variables   *map[string]model.WrappedValue
 }
 
-func (s *Scope) SetVar(name string, val WrappedValue) {
+func (s *Scope) SetVar(name string, val model.WrappedValue) {
 	(*s.variables)[name] = val
 }
 
-func (s *Scope) GetVar(name string) (WrappedValue, bool) {
+func (s *Scope) GetVar(name string) (model.WrappedValue, bool) {
 	val, ok := (*s.variables)[name]
 	return val, ok
 }
 
-func (s *Scope) ResolveVariable(name string) WrappedValue {
+func (s *Scope) ResolveVariable(name string) model.WrappedValue {
 	val, ok := s.GetVar(name)
 	if ok {
 		return val
@@ -37,7 +38,7 @@ func (s *Scope) ResolveVariable(name string) WrappedValue {
 	return s.ParentScope.ResolveVariable(name)
 }
 
-func (s *Scope) ReassignVariable(name string, val WrappedValue, children []WrappedValue) {
+func (s *Scope) ReassignVariable(name string, val model.WrappedValue, children []model.WrappedValue) {
 	curr, ok := s.GetVar(name)
 	if ok {
 		if len(children) == 0 {

@@ -2,9 +2,10 @@ package library
 
 import (
 	"fmt"
+	"ilang/model"
 )
 
-func Print(args []WrappedValue) WrappedValue {
+func Print(args []model.WrappedValue) model.WrappedValue {
 	for i, arg := range args {
 		switch arg.(type) {
 		case *StringValue:
@@ -20,7 +21,7 @@ func Print(args []WrappedValue) WrappedValue {
 	return NewNullValue()
 }
 
-func Println(args []WrappedValue) WrappedValue {
+func Println(args []model.WrappedValue) model.WrappedValue {
 	Print(args)
 	fmt.Println()
 	return NewNullValue()

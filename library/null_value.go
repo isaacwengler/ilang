@@ -1,6 +1,9 @@
 package library
 
-import "errors"
+import (
+	"errors"
+	"ilang/model"
+)
 
 type NullValue struct {
 }
@@ -13,7 +16,7 @@ func (s *NullValue) PrintValue() string {
 	return "null"
 }
 
-func (s *NullValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *NullValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -25,7 +28,7 @@ func (s *NullValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *NullValue) Equals(other WrappedValue) *BooleanValue {
+func (s *NullValue) Equals(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *NullValue:
 		return NewBooleanValue(true)
@@ -34,11 +37,12 @@ func (s *NullValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *NullValue) GetChild(key WrappedValue) WrappedValue {
-	return nil
+func (s *NullValue) GetChild(key model.WrappedValue) model.WrappedValue {
+	err := errors.New("null value does not have children")
+	panic(err)
 }
 
-func (s *NullValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *NullValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 	err := errors.New("Cannot set child property on null value")
 	panic(err)
 }

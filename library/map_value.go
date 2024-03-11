@@ -4,11 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"ilang/logger"
+	"ilang/model"
 	"strconv"
 )
 
 type MapValue struct {
-	value map[any]WrappedValue
+	value map[any]model.WrappedValue
 }
 
 func (s *MapValue) IsWrappedValue() bool {
@@ -39,7 +40,7 @@ func (s *MapValue) PrintValue() string {
 	return res
 }
 
-func (s *MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *MapValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	default:
 		err := errors.New("operator '" + op + "' not supported for map type")
@@ -47,7 +48,7 @@ func (s *MapValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *MapValue) GetChild(key WrappedValue) WrappedValue {
+func (s *MapValue) GetChild(key model.WrappedValue) model.WrappedValue {
 	switch key.(type) {
 	case *IntValue:
 		index := key.(*IntValue).GetValue()
@@ -74,10 +75,10 @@ func (s *MapValue) GetChild(key WrappedValue) WrappedValue {
 	}
 }
 
-func (s *MapValue) SetChild(key WrappedValue, value WrappedValue) {
-	set(s, []WrappedValue{key, value})
+func (s *MapValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
+	set(s, []model.WrappedValue{key, value})
 }
 
-func NewMapValue(value map[any]WrappedValue) *MapValue {
+func NewMapValue(value map[any]model.WrappedValue) *MapValue {
 	return &MapValue{value}
 }

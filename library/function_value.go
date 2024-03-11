@@ -3,6 +3,7 @@ package library
 import (
 	"errors"
 	parser "ilang/generated"
+	"ilang/model"
 )
 
 type FunctionValue struct {
@@ -28,7 +29,7 @@ func (s *FunctionValue) PrintValue() string {
 	return res
 }
 
-func (s *FunctionValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *FunctionValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	default:
 		err := errors.New("operator '" + op + "' not supported for function type")
@@ -36,11 +37,12 @@ func (s *FunctionValue) Comparison(op string, other WrappedValue) *BooleanValue 
 	}
 }
 
-func (s *FunctionValue) GetChild(key WrappedValue) WrappedValue {
-    return nil
+func (s *FunctionValue) GetChild(key model.WrappedValue) model.WrappedValue {
+	err := errors.New("function value does not have children")
+	panic(err)
 }
 
-func (s *FunctionValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *FunctionValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 	err := errors.New("Cannot set child property on function value")
 	panic(err)
 }

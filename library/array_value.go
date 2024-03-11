@@ -2,17 +2,18 @@ package library
 
 import (
 	"errors"
+	"ilang/model"
 )
 
 type ArrayValue struct {
-	value []WrappedValue
+	value []model.WrappedValue
 }
 
 func (s *ArrayValue) IsWrappedValue() bool {
 	return true
 }
 
-func (s *ArrayValue) GetValue() []WrappedValue {
+func (s *ArrayValue) GetValue() []model.WrappedValue {
 	return s.value
 }
 
@@ -28,7 +29,7 @@ func (s *ArrayValue) PrintValue() string {
 	return res
 }
 
-func (s *ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *ArrayValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	// TODO: array == comparison? by ptr value or value?
 	// ptr value was not as straightforward as I though...
@@ -38,7 +39,7 @@ func (s *ArrayValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *ArrayValue) GetChild(key WrappedValue) WrappedValue {
+func (s *ArrayValue) GetChild(key model.WrappedValue) model.WrappedValue {
 	switch key.(type) {
 	case *IntValue:
 		index := key.(*IntValue).GetValue()
@@ -55,7 +56,7 @@ func (s *ArrayValue) GetChild(key WrappedValue) WrappedValue {
 	}
 }
 
-func (s *ArrayValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *ArrayValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 	switch key.(type) {
 	case *IntValue:
 		index := key.(*IntValue).GetValue()
@@ -70,6 +71,6 @@ func (s *ArrayValue) SetChild(key WrappedValue, value WrappedValue) {
 	}
 }
 
-func NewArrayValue(value []WrappedValue) *ArrayValue {
+func NewArrayValue(value []model.WrappedValue) *ArrayValue {
 	return &ArrayValue{value}
 }

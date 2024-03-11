@@ -2,6 +2,7 @@ package library
 
 import (
 	"errors"
+	"ilang/model"
 	"math"
 	"strconv"
 )
@@ -22,7 +23,7 @@ func (s *IntValue) GetValue() int64 {
 	return s.value
 }
 
-func (s *IntValue) Comparison(op string, other WrappedValue) *BooleanValue {
+func (s *IntValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
 	switch op {
 	case "==":
 		return s.Equals(other)
@@ -42,7 +43,7 @@ func (s *IntValue) Comparison(op string, other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *IntValue) Equals(other WrappedValue) *BooleanValue {
+func (s *IntValue) Equals(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() == other.(*IntValue).GetValue())
@@ -53,7 +54,7 @@ func (s *IntValue) Equals(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *IntValue) LessThan(other WrappedValue) *BooleanValue {
+func (s *IntValue) LessThan(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() < other.(*IntValue).GetValue())
@@ -65,7 +66,7 @@ func (s *IntValue) LessThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *IntValue) GreaterThan(other WrappedValue) *BooleanValue {
+func (s *IntValue) GreaterThan(other model.WrappedValue) *BooleanValue {
 	switch other.(type) {
 	case *IntValue:
 		return NewBooleanValue(s.GetValue() > other.(*IntValue).GetValue())
@@ -77,7 +78,7 @@ func (s *IntValue) GreaterThan(other WrappedValue) *BooleanValue {
 	}
 }
 
-func (s *IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
+func (s *IntValue) Arithmetic(op string, other model.WrappedValue) model.WrappedValue {
 	switch other.(type) {
 	case *IntValue:
 		otherVal := other.(*IntValue).GetValue()
@@ -123,11 +124,12 @@ func (s *IntValue) Arithmetic(op string, other WrappedValue) WrappedValue {
 	}
 }
 
-func (s *IntValue) GetChild(key WrappedValue) WrappedValue {
-    return nil
+func (s *IntValue) GetChild(key model.WrappedValue) model.WrappedValue {
+	err := errors.New("int value does not have children")
+	panic(err)
 }
 
-func (s *IntValue) SetChild(key WrappedValue, value WrappedValue) {
+func (s *IntValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 	err := errors.New("Cannot set child property on int value")
 	panic(err)
 }

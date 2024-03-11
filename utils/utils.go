@@ -17,3 +17,4 @@ func ValidateArgsBetween(name string, minArgs int, maxArgs int, recieved int) {
 		panic(err)
 	}
 }
+

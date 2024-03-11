@@ -3,12 +3,13 @@ package library
 import (
 	"errors"
 	"ilang/utils"
+    "ilang/model"
 )
 
-func get(m *MapValue, args []WrappedValue) WrappedValue {
+func get(m *MapValue, args []model.WrappedValue) model.WrappedValue {
 	utils.ValidateArgsBetween("map.get", 1, 2, len(args))
 	property := args[0]
-	var fallback WrappedValue
+	var fallback model.WrappedValue
 	if len(args) == 1 {
 		fallback = NewNullValue()
 	} else {
@@ -36,7 +37,7 @@ func get(m *MapValue, args []WrappedValue) WrappedValue {
 	}
 }
 
-func set(m *MapValue, args []WrappedValue) {
+func set(m *MapValue, args []model.WrappedValue) {
 	utils.ValidateArgsBetween("map.set", 2, 2, len(args))
 	property := args[0]
 	value := args[1]
@@ -54,9 +55,9 @@ func set(m *MapValue, args []WrappedValue) {
 	}
 }
 
-func keys(m *MapValue, args []WrappedValue) WrappedValue {
+func keys(m *MapValue, args []model.WrappedValue) model.WrappedValue {
 	utils.ValidateArgsBetween("map.keys", 0, 0, len(args))
-	keys := make([]WrappedValue, len(m.value))
+	keys := make([]model.WrappedValue, len(m.value))
 	i := 0
 	for k := range m.value {
 		switch k.(type) {
@@ -73,9 +74,9 @@ func keys(m *MapValue, args []WrappedValue) WrappedValue {
 	return NewArrayValue(keys)
 }
 
-func values(m *MapValue, args []WrappedValue) WrappedValue {
+func values(m *MapValue, args []model.WrappedValue) model.WrappedValue {
 	utils.ValidateArgsBetween("map.values", 0, 0, len(args))
-	values := make([]WrappedValue, len(m.value))
+	values := make([]model.WrappedValue, len(m.value))
 	i := 0
 	for _, v := range m.value {
 		values[i] = v
@@ -84,24 +85,24 @@ func values(m *MapValue, args []WrappedValue) WrappedValue {
 	return NewArrayValue(values)
 }
 
-func makeMapFunction(m *MapValue, name string) (WrappedValue, bool) {
+func makeMapFunction(m *MapValue, name string) (model.WrappedValue, bool) {
 	displayName := "map." + name
 	switch name {
 	case "get":
-		return NewLibFunctionValue(func(args []WrappedValue) WrappedValue {
+		return NewLibFunctionValue(func(args []model.WrappedValue) model.WrappedValue {
 			return get(m, args)
 		}, displayName), true
 	case "set":
-		return NewLibFunctionValue(func(args []WrappedValue) WrappedValue {
+		return NewLibFunctionValue(func(args []model.WrappedValue) model.WrappedValue {
 			set(m, args)
             return nil
 		}, displayName), true
 	case "keys":
-		return NewLibFunctionValue(func(args []WrappedValue) WrappedValue {
+		return NewLibFunctionValue(func(args []model.WrappedValue) model.WrappedValue {
 			return keys(m, args)
 		}, displayName), true
 	case "values":
-		return NewLibFunctionValue(func(args []WrappedValue) WrappedValue {
+		return NewLibFunctionValue(func(args []model.WrappedValue) model.WrappedValue {
 			return values(m, args)
 		}, displayName), true
 	default:
