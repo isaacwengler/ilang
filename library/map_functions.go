@@ -60,10 +60,10 @@ func keys(m *MapValue, args []model.WrappedValue) model.WrappedValue {
 	i := 0
 	for k := range m.value {
 		switch k.(type) {
-		case *IntValue:
-			keys[i] = k.(*IntValue)
-		case *StringValue:
-			keys[i] = k.(*StringValue)
+		case int64:
+			keys[i] = NewIntValue(k.(int64)) 
+		case string:
+			keys[i] = NewStringValue(k.(string)) 
 		default:
 			err := errors.New("Map indexing only supported with int and string values. Found key with different type")
 			panic(err)

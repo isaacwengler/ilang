@@ -52,6 +52,7 @@ go run .
 - ~~command line with file and interactive mode~~
 - ~~map/array indexing~~
 - handle early returns
+- try/catch/throw
 - custom error stat https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
 - imports/exports
 - standard functions on wrapped value
