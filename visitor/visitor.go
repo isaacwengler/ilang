@@ -6,21 +6,22 @@ import (
 	"ilang/library"
 	"ilang/logger"
 	"ilang/model"
+	"ilang/scope"
 	"strconv"
 
 	"github.com/antlr4-go/antlr/v4"
 )
 
 func NewVisitor() *Visitor {
-	v := &Visitor{&antlr.BaseParseTreeVisitor{}, library.NewScope(nil)}
+	v := &Visitor{&antlr.BaseParseTreeVisitor{}, scope.NewScope(nil)}
 	v.registerGlobalFunctions()
-	v.scope = library.NewScope(v.scope)
+	v.scope = scope.NewScope(v.scope)
 	return v
 }
 
 type Visitor struct {
 	*antlr.BaseParseTreeVisitor
-	scope *library.Scope
+	scope *scope.Scope
 }
 
 func (v *Visitor) VisitStartWrapped(ctx *parser.StartContext) model.WrappedValue {
@@ -251,7 +252,7 @@ func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) model.Wrap
 
 func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) model.WrappedValue {
 	logger.Debug("pushing new scope for foreach variables")
-	v.scope = library.NewScope(v.scope)
+	v.scope = scope.NewScope(v.scope)
 
 	expr := v.VisitWrapped(ctx.Expr())
 	switch expr.(type) {
@@ -274,7 +275,7 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) model.
 
 func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) model.WrappedValue {
 	logger.Debug("pushing new scope for for variables")
-	v.scope = library.NewScope(v.scope)
+	v.scope = scope.NewScope(v.scope)
 
 	v.VisitWrapped(ctx.GetInit())
 	var last model.WrappedValue = library.NewNullValue()
@@ -284,7 +285,7 @@ func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) model.WrappedV
 	}
 
 	logger.Debug("popping off scope with for variables")
-	v.scope = library.NewScope(v.scope)
+	v.scope = scope.NewScope(v.scope)
 	return last
 }
 
@@ -302,7 +303,7 @@ func (v *Visitor) VisitElseStatementWrapped(ctx *parser.ElseStatementContext) mo
 
 func (v *Visitor) VisitScopeBodyWrapped(ctx *parser.ScopeBodyContext) model.WrappedValue {
 	logger.Debug("pushing new scope")
-	v.scope = library.NewScope(v.scope)
+	v.scope = scope.NewScope(v.scope)
 
 	val := v.VisitChildrenWrapped(ctx)
 

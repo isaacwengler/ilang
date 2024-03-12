@@ -2,12 +2,11 @@ package library
 
 import (
 	"errors"
-	"ilang/utils"
     "ilang/model"
 )
 
 func get(m *MapValue, args []model.WrappedValue) model.WrappedValue {
-	utils.ValidateArgsBetween("map.get", 1, 2, len(args))
+	validateArgsBetween("map.get", 1, 2, len(args))
 	property := args[0]
 	var fallback model.WrappedValue
 	if len(args) == 1 {
@@ -38,7 +37,7 @@ func get(m *MapValue, args []model.WrappedValue) model.WrappedValue {
 }
 
 func set(m *MapValue, args []model.WrappedValue) {
-	utils.ValidateArgsBetween("map.set", 2, 2, len(args))
+	validateArgsBetween("map.set", 2, 2, len(args))
 	property := args[0]
 	value := args[1]
 
@@ -56,7 +55,7 @@ func set(m *MapValue, args []model.WrappedValue) {
 }
 
 func keys(m *MapValue, args []model.WrappedValue) model.WrappedValue {
-	utils.ValidateArgsBetween("map.keys", 0, 0, len(args))
+	validateArgsBetween("map.keys", 0, 0, len(args))
 	keys := make([]model.WrappedValue, len(m.value))
 	i := 0
 	for k := range m.value {
@@ -75,7 +74,7 @@ func keys(m *MapValue, args []model.WrappedValue) model.WrappedValue {
 }
 
 func values(m *MapValue, args []model.WrappedValue) model.WrappedValue {
-	utils.ValidateArgsBetween("map.values", 0, 0, len(args))
+	validateArgsBetween("map.values", 0, 0, len(args))
 	values := make([]model.WrappedValue, len(m.value))
 	i := 0
 	for _, v := range m.value {

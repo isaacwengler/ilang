@@ -4,12 +4,13 @@ import (
 	"errors"
 	parser "ilang/generated"
 	"ilang/model"
+	"ilang/scope"
 )
 
 type FunctionValue struct {
 	Args         []string
 	Def          parser.IScopeBodyContext
-	ClosureScope *Scope
+	ClosureScope *scope.Scope
 }
 
 func (s *FunctionValue) IsWrappedValue() bool {
@@ -47,6 +48,6 @@ func (s *FunctionValue) SetChild(key model.WrappedValue, value model.WrappedValu
 	panic(err)
 }
 
-func NewFunctionValue(args []string, def parser.IScopeBodyContext, outsideScope *Scope) *FunctionValue {
+func NewFunctionValue(args []string, def parser.IScopeBodyContext, outsideScope *scope.Scope) *FunctionValue {
 	return &FunctionValue{args, def, outsideScope}
 }

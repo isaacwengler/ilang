@@ -3,11 +3,10 @@ package library
 import (
 	"errors"
 	"ilang/model"
-	"ilang/utils"
 )
 
 func length(arr *ArrayValue, args []model.WrappedValue) model.WrappedValue {
-	utils.ValidateArgsBetween("array.length", 0, 0, len(args))
+	validateArgsBetween("array.length", 0, 0, len(args))
 	return NewIntValue(int64(len(arr.GetValue())))
 }
 
@@ -17,7 +16,7 @@ func push(arr *ArrayValue, args []model.WrappedValue) model.WrappedValue {
 }
 
 func pop(arr *ArrayValue, args []model.WrappedValue) model.WrappedValue {
-	utils.ValidateArgsBetween("array.pop", 0, 0, len(args))
+	validateArgsBetween("array.pop", 0, 0, len(args))
 	l := len(arr.value)
 	popped := arr.value[l-1]
 	arr.value = arr.value[:l-1]
