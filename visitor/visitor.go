@@ -103,9 +103,8 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) mode
 	case *library.FunctionValue:
 		function := expr.(*library.FunctionValue)
 
-		logger.Debug("Calling function, switching to closure scope")
 		currentScope := v.scope
-		v.scope = function.ClosureScope
+        functionScope := scope.NewScope(function.ClosureScope)
 
 		argsCtx := ctx.FunctionArgs().GetArgs()
 		if len(argsCtx) != len(function.Args) {
@@ -114,8 +113,11 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) mode
 		}
 
 		for i := range argsCtx {
-			v.scope.SetVar(function.Args[i], v.VisitWrapped(argsCtx[i]))
+			functionScope.SetVar(function.Args[i], v.VisitWrapped(argsCtx[i]))
 		}
+
+		logger.Debug("Calling function, switching to closure scope")
+        v.scope = functionScope
 
 		res := v.VisitWrapped(function.Def)
 		logger.Debug("Function called, now returning to current scope")
