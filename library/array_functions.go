@@ -23,6 +23,21 @@ func pop(arr *ArrayValue, args []model.WrappedValue) model.WrappedValue {
 	return popped
 }
 
+func contains(arr *ArrayValue, args []model.WrappedValue) model.WrappedValue {
+	validateArgsBetween("array.contains", 1, 1, len(args))
+	for _, v := range arr.value {
+		switch v.(type) {
+		case *FunctionValue:
+			// TODO extract function calling into function
+		default:
+			if v.Comparison("==", args[0]).(*BooleanValue).value {
+				return NewBooleanValue(true)
+			}
+		}
+	}
+	return NewBooleanValue(false)
+}
+
 func makeArrayFunction(a *ArrayValue, name string) model.WrappedValue {
 	displayName := "array." + name
 	switch name {
@@ -37,6 +52,10 @@ func makeArrayFunction(a *ArrayValue, name string) model.WrappedValue {
 	case "pop":
 		return NewLibFunctionValue(func(args []model.WrappedValue) model.WrappedValue {
 			return pop(a, args)
+		}, displayName)
+	case "contains":
+		return NewLibFunctionValue(func(args []model.WrappedValue) model.WrappedValue {
+			return contains(a, args)
 		}, displayName)
 	default:
 		err := errors.New("Array value does not have property: " + displayName)
