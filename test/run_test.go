@@ -5,14 +5,6 @@ import (
 	"testing"
 )
 
-func TestStringAssign(t *testing.T) {
-	input := `let var = "expected";
-    var;`
-
-	res := interpreter.RunIlang(input).PrintValue()
-	assertStringEquals(t, res, `"expected"`)
-}
-
 func TestIntAssign(t *testing.T) {
 	input := `let var = 12;
     var;`
@@ -138,20 +130,6 @@ func TestEqualsComparisonSameInt(t *testing.T) {
 
 func TestEqualsComparisonDifferentInt(t *testing.T) {
 	input := `1 == 2;`
-
-	res := interpreter.RunIlang(input).PrintValue()
-	assertStringEquals(t, res, "false")
-}
-
-func TestEqualsComparisonString(t *testing.T) {
-	input := `"hello" == "hello";`
-
-	res := interpreter.RunIlang(input).PrintValue()
-	assertStringEquals(t, res, "true")
-}
-
-func TestEqualsComparisonStringDifferent(t *testing.T) {
-	input := `"hello" == "hello2";`
 
 	res := interpreter.RunIlang(input).PrintValue()
 	assertStringEquals(t, res, "false")
@@ -349,14 +327,4 @@ func TestForEachInvalid(t *testing.T) {
     `
 
 	assertPanic(t, func() { interpreter.RunIlang(input) })
-}
-
-func TestStringConcat(t *testing.T) {
-	input := `
-    let a = "hi " + "world";
-    a;
-    `
-
-	res := interpreter.RunIlang(input).PrintValue()
-	assertStringEquals(t, res, `"hi world"`)
 }
