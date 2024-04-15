@@ -25,7 +25,7 @@ let calcFactorial = func(num) {
     if (num <= 1) {
         return num;
     }
-    return calcFactorial(num - 1) * num;
+    return num * calcFactorial(num - 1);
 };
 
 println(calcFactorial(5));

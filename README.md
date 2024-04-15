@@ -56,5 +56,4 @@ go run .
 - custom error stat https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
 - imports/exports
 - standard functions on wrapped value
-- fix bug where (i < nums.length()) tries to do i < nums before nums.length()
 - simple package manager (un-versioned git repo curls? maybe)

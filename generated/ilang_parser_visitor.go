@@ -56,11 +56,11 @@ type ilang_parserVisitor interface {
 	// Visit a parse tree produced by ilang_parser#property.
 	VisitProperty(ctx *PropertyContext) interface{}
 
-	// Visit a parse tree produced by ilang_parser#symbolExpr.
-	VisitSymbolExpr(ctx *SymbolExprContext) interface{}
-
 	// Visit a parse tree produced by ilang_parser#groupingExpr.
 	VisitGroupingExpr(ctx *GroupingExprContext) interface{}
+
+	// Visit a parse tree produced by ilang_parser#symbolExpr.
+	VisitSymbolExpr(ctx *SymbolExprContext) interface{}
 
 	// Visit a parse tree produced by ilang_parser#booleanAlgebra.
 	VisitBooleanAlgebra(ctx *BooleanAlgebraContext) interface{}

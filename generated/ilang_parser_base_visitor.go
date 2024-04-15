@@ -72,11 +72,11 @@ func (v *Baseilang_parserVisitor) VisitProperty(ctx *PropertyContext) interface{
 	return v.VisitChildren(ctx)
 }
 
-func (v *Baseilang_parserVisitor) VisitSymbolExpr(ctx *SymbolExprContext) interface{} {
+func (v *Baseilang_parserVisitor) VisitGroupingExpr(ctx *GroupingExprContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *Baseilang_parserVisitor) VisitGroupingExpr(ctx *GroupingExprContext) interface{} {
+func (v *Baseilang_parserVisitor) VisitSymbolExpr(ctx *SymbolExprContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

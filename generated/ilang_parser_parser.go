@@ -102,18 +102,18 @@ func ilang_parserParserInit() {
 		79, 85, 1, 0, 0, 0, 80, 85, 3, 18, 9, 0, 81, 85, 3, 20, 10, 0, 82, 85,
 		3, 24, 12, 0, 83, 85, 3, 22, 11, 0, 84, 74, 1, 0, 0, 0, 84, 77, 1, 0, 0,
 		0, 84, 80, 1, 0, 0, 0, 84, 81, 1, 0, 0, 0, 84, 82, 1, 0, 0, 0, 84, 83,
-		1, 0, 0, 0, 85, 5, 1, 0, 0, 0, 86, 87, 6, 3, -1, 0, 87, 99, 3, 36, 18,
-		0, 88, 99, 3, 38, 19, 0, 89, 99, 3, 42, 21, 0, 90, 99, 3, 44, 22, 0, 91,
-		99, 3, 46, 23, 0, 92, 99, 3, 48, 24, 0, 93, 99, 3, 50, 25, 0, 94, 99, 3,
-		52, 26, 0, 95, 99, 3, 54, 27, 0, 96, 99, 3, 60, 30, 0, 97, 99, 3, 8, 4,
+		1, 0, 0, 0, 85, 5, 1, 0, 0, 0, 86, 87, 6, 3, -1, 0, 87, 99, 3, 60, 30,
+		0, 88, 99, 3, 36, 18, 0, 89, 99, 3, 38, 19, 0, 90, 99, 3, 42, 21, 0, 91,
+		99, 3, 44, 22, 0, 92, 99, 3, 46, 23, 0, 93, 99, 3, 48, 24, 0, 94, 99, 3,
+		50, 25, 0, 95, 99, 3, 52, 26, 0, 96, 99, 3, 54, 27, 0, 97, 99, 3, 8, 4,
 		0, 98, 86, 1, 0, 0, 0, 98, 88, 1, 0, 0, 0, 98, 89, 1, 0, 0, 0, 98, 90,
 		1, 0, 0, 0, 98, 91, 1, 0, 0, 0, 98, 92, 1, 0, 0, 0, 98, 93, 1, 0, 0, 0,
 		98, 94, 1, 0, 0, 0, 98, 95, 1, 0, 0, 0, 98, 96, 1, 0, 0, 0, 98, 97, 1,
-		0, 0, 0, 99, 121, 1, 0, 0, 0, 100, 101, 10, 6, 0, 0, 101, 102, 5, 9, 0,
-		0, 102, 120, 3, 6, 3, 7, 103, 104, 10, 5, 0, 0, 104, 105, 5, 8, 0, 0, 105,
-		120, 3, 6, 3, 6, 106, 107, 10, 4, 0, 0, 107, 108, 5, 10, 0, 0, 108, 120,
-		3, 6, 3, 5, 109, 110, 10, 3, 0, 0, 110, 120, 3, 12, 6, 0, 111, 112, 10,
-		2, 0, 0, 112, 113, 5, 19, 0, 0, 113, 120, 5, 32, 0, 0, 114, 115, 10, 1,
+		0, 0, 0, 99, 121, 1, 0, 0, 0, 100, 101, 10, 3, 0, 0, 101, 102, 5, 9, 0,
+		0, 102, 120, 3, 6, 3, 4, 103, 104, 10, 2, 0, 0, 104, 105, 5, 8, 0, 0, 105,
+		120, 3, 6, 3, 3, 106, 107, 10, 1, 0, 0, 107, 108, 5, 10, 0, 0, 108, 120,
+		3, 6, 3, 2, 109, 110, 10, 16, 0, 0, 110, 120, 3, 12, 6, 0, 111, 112, 10,
+		15, 0, 0, 112, 113, 5, 19, 0, 0, 113, 120, 5, 32, 0, 0, 114, 115, 10, 14,
 		0, 0, 115, 116, 5, 5, 0, 0, 116, 117, 3, 6, 3, 0, 117, 118, 5, 6, 0, 0,
 		118, 120, 1, 0, 0, 0, 119, 100, 1, 0, 0, 0, 119, 103, 1, 0, 0, 0, 119,
 		106, 1, 0, 0, 0, 119, 109, 1, 0, 0, 0, 119, 111, 1, 0, 0, 0, 119, 114,
@@ -1631,50 +1631,6 @@ func (s *PropertyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
-type SymbolExprContext struct {
-	ExprContext
-}
-
-func NewSymbolExprContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SymbolExprContext {
-	var p = new(SymbolExprContext)
-
-	InitEmptyExprContext(&p.ExprContext)
-	p.parser = parser
-	p.CopyAll(ctx.(*ExprContext))
-
-	return p
-}
-
-func (s *SymbolExprContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *SymbolExprContext) Symbol() ISymbolContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(ISymbolContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISymbolContext)
-}
-
-func (s *SymbolExprContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case ilang_parserVisitor:
-		return t.VisitSymbolExpr(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
 type GroupingExprContext struct {
 	ExprContext
 }
@@ -1713,6 +1669,50 @@ func (s *GroupingExprContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 	switch t := visitor.(type) {
 	case ilang_parserVisitor:
 		return t.VisitGroupingExpr(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type SymbolExprContext struct {
+	ExprContext
+}
+
+func NewSymbolExprContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SymbolExprContext {
+	var p = new(SymbolExprContext)
+
+	InitEmptyExprContext(&p.ExprContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ExprContext))
+
+	return p
+}
+
+func (s *SymbolExprContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SymbolExprContext) Symbol() ISymbolContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISymbolContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISymbolContext)
+}
+
+func (s *SymbolExprContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ilang_parserVisitor:
+		return t.VisitSymbolExpr(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -1892,13 +1892,22 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case ilang_parserNOT:
-		localctx = NewNotExprContext(p, localctx)
+	case ilang_parserOPEN_PAREN:
+		localctx = NewGroupingExprContext(p, localctx)
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 
 		{
 			p.SetState(87)
+			p.Grouping()
+		}
+
+	case ilang_parserNOT:
+		localctx = NewNotExprContext(p, localctx)
+		p.SetParserRuleContext(localctx)
+		_prevctx = localctx
+		{
+			p.SetState(88)
 			p.Not()
 		}
 
@@ -1907,7 +1916,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(88)
+			p.SetState(89)
 			p.Symbol()
 		}
 
@@ -1916,7 +1925,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(89)
+			p.SetState(90)
 			p.StringLiteral()
 		}
 
@@ -1925,7 +1934,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(90)
+			p.SetState(91)
 			p.IntLiteral()
 		}
 
@@ -1934,7 +1943,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(91)
+			p.SetState(92)
 			p.FloatLiteral()
 		}
 
@@ -1943,7 +1952,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(92)
+			p.SetState(93)
 			p.NullLiteral()
 		}
 
@@ -1952,7 +1961,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(93)
+			p.SetState(94)
 			p.BooleanLiteral()
 		}
 
@@ -1961,7 +1970,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(94)
+			p.SetState(95)
 			p.ArrayLiteral()
 		}
 
@@ -1970,17 +1979,8 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
-			p.SetState(95)
-			p.MapLiteral()
-		}
-
-	case ilang_parserOPEN_PAREN:
-		localctx = NewGroupingExprContext(p, localctx)
-		p.SetParserRuleContext(localctx)
-		_prevctx = localctx
-		{
 			p.SetState(96)
-			p.Grouping()
+			p.MapLiteral()
 		}
 
 	case ilang_parserFUNC:
@@ -2024,8 +2024,8 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				p.PushNewRecursionContext(localctx, _startState, ilang_parserRULE_expr)
 				p.SetState(100)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 6)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 6)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 					goto errorExit
 				}
 				{
@@ -2038,7 +2038,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				}
 				{
 					p.SetState(102)
-					p.expr(7)
+					p.expr(4)
 				}
 
 			case 2:
@@ -2046,8 +2046,8 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				p.PushNewRecursionContext(localctx, _startState, ilang_parserRULE_expr)
 				p.SetState(103)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 5)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 5)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 2)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 					goto errorExit
 				}
 				{
@@ -2060,7 +2060,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				}
 				{
 					p.SetState(105)
-					p.expr(6)
+					p.expr(3)
 				}
 
 			case 3:
@@ -2068,8 +2068,8 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				p.PushNewRecursionContext(localctx, _startState, ilang_parserRULE_expr)
 				p.SetState(106)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 4)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 4)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 1)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 1)", ""))
 					goto errorExit
 				}
 				{
@@ -2082,7 +2082,7 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				}
 				{
 					p.SetState(108)
-					p.expr(5)
+					p.expr(2)
 				}
 
 			case 4:
@@ -2090,8 +2090,8 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				p.PushNewRecursionContext(localctx, _startState, ilang_parserRULE_expr)
 				p.SetState(109)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 16)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 16)", ""))
 					goto errorExit
 				}
 				{
@@ -2104,8 +2104,8 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				p.PushNewRecursionContext(localctx, _startState, ilang_parserRULE_expr)
 				p.SetState(111)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 2)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 15)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 15)", ""))
 					goto errorExit
 				}
 				{
@@ -2130,8 +2130,8 @@ func (p *ilang_parser) expr(_p int) (localctx IExprContext) {
 				p.PushNewRecursionContext(localctx, _startState, ilang_parserRULE_expr)
 				p.SetState(114)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 1)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 1)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 14)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 14)", ""))
 					goto errorExit
 				}
 				{
@@ -6352,22 +6352,22 @@ func (p *ilang_parser) Sempred(localctx antlr.RuleContext, ruleIndex, predIndex 
 func (p *ilang_parser) Expr_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
 	case 0:
-		return p.Precpred(p.GetParserRuleContext(), 6)
-
-	case 1:
-		return p.Precpred(p.GetParserRuleContext(), 5)
-
-	case 2:
-		return p.Precpred(p.GetParserRuleContext(), 4)
-
-	case 3:
 		return p.Precpred(p.GetParserRuleContext(), 3)
 
-	case 4:
+	case 1:
 		return p.Precpred(p.GetParserRuleContext(), 2)
 
-	case 5:
+	case 2:
 		return p.Precpred(p.GetParserRuleContext(), 1)
+
+	case 3:
+		return p.Precpred(p.GetParserRuleContext(), 16)
+
+	case 4:
+		return p.Precpred(p.GetParserRuleContext(), 15)
+
+	case 5:
+		return p.Precpred(p.GetParserRuleContext(), 14)
 
 	default:
 		panic("No predicate with index: " + fmt.Sprint(predIndex))

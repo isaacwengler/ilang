@@ -20,6 +20,10 @@ statement: (
 );
 
 expr: 
+    grouping #groupingExpr |
+    expr  functionArgs #functionCall |
+    expr DOT SYMBOL #property |
+    expr OPEN_BRACKET expr CLOSE_BRACKET #computedProperty |
     not #notExpr |
     symbol #symbolExpr |
     stringLiteral #stringExpr |
@@ -29,14 +33,10 @@ expr:
     booleanLiteral #booleanExpr |
     arrayLiteral #arrayExpr |
     mapLiteral #mapExpr |
-    grouping #groupingExpr |
     functionDef #functionDefExpr |
     expr CONDITIONAL_OP expr #condition |
     expr ARITHMETIC_OP expr #arithmetic |
-    expr BOOLEAN_OP expr #booleanAlgebra |
-    expr  functionArgs #functionCall |
-    expr DOT SYMBOL #property |
-    expr OPEN_BRACKET expr CLOSE_BRACKET #computedProperty
+    expr BOOLEAN_OP expr #booleanAlgebra
 ;
 
 functionDef: FUNC functionDefArgs scopeBody;

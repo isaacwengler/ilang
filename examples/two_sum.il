@@ -1,6 +1,6 @@
 let twoSum = func(nums, target) {
     let seen = {};
-    for (let i = 0; i < (nums.length()); i = i + 1) {
+    for (let i = 0; i < nums.length(); i = i + 1) {
         let num = nums[i];
         if (seen[target - num] != null) {
             return [seen[target - num], i];
