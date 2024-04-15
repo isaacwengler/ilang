@@ -7,6 +7,7 @@ import (
 
 type StringValue struct {
 	value string
+    state model.ExecutionState
 }
 
 func (s *StringValue) IsWrappedValue() bool {
@@ -19,6 +20,14 @@ func (s *StringValue) PrintValue() string {
 
 func (s *StringValue) GetValue() string {
 	return s.value
+}
+
+func (s *StringValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *StringValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *StringValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
@@ -110,5 +119,5 @@ func (s *StringValue) SetChild(key model.WrappedValue, value model.WrappedValue)
 }
 
 func NewStringValue(value string) *StringValue {
-	return &StringValue{value}
+	return &StringValue{value, model.DEFAULT}
 }

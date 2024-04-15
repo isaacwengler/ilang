@@ -9,6 +9,7 @@ import (
 
 type IntValue struct {
 	value int64
+	state model.ExecutionState
 }
 
 func (s *IntValue) IsWrappedValue() bool {
@@ -21,6 +22,14 @@ func (s *IntValue) PrintValue() string {
 
 func (s *IntValue) GetValue() int64 {
 	return s.value
+}
+
+func (s *IntValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *IntValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *IntValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
@@ -135,5 +144,5 @@ func (s *IntValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 }
 
 func NewIntValue(value int64) *IntValue {
-	return &IntValue{value}
+	return &IntValue{value, model.DEFAULT}
 }

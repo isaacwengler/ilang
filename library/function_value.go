@@ -11,10 +11,19 @@ type FunctionValue struct {
 	Args         []string
 	Def          parser.IScopeBodyContext
 	ClosureScope *scope.Scope
+	state        model.ExecutionState
 }
 
 func (s *FunctionValue) IsWrappedValue() bool {
 	return true
+}
+
+func (s *FunctionValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *FunctionValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *FunctionValue) PrintValue() string {
@@ -49,5 +58,5 @@ func (s *FunctionValue) SetChild(key model.WrappedValue, value model.WrappedValu
 }
 
 func NewFunctionValue(args []string, def parser.IScopeBodyContext, outsideScope *scope.Scope) *FunctionValue {
-	return &FunctionValue{args, def, outsideScope}
+	return &FunctionValue{args, def, outsideScope, model.DEFAULT}
 }

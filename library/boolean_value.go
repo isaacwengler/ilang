@@ -8,6 +8,7 @@ import (
 
 type BooleanValue struct {
 	value bool
+	state model.ExecutionState
 }
 
 func (s *BooleanValue) IsWrappedValue() bool {
@@ -20,6 +21,14 @@ func (s *BooleanValue) PrintValue() string {
 
 func (s *BooleanValue) GetValue() bool {
 	return s.value
+}
+
+func (s *BooleanValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *BooleanValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *BooleanValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
@@ -54,5 +63,5 @@ func (s *BooleanValue) SetChild(key model.WrappedValue, value model.WrappedValue
 }
 
 func NewBooleanValue(value bool) *BooleanValue {
-	return &BooleanValue{value}
+	return &BooleanValue{value, model.DEFAULT}
 }

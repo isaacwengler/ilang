@@ -104,7 +104,7 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) mode
 		function := expr.(*library.FunctionValue)
 
 		currentScope := v.scope
-        functionScope := scope.NewScope(function.ClosureScope)
+		functionScope := scope.NewScope(function.ClosureScope)
 
 		argsCtx := ctx.FunctionArgs().GetArgs()
 		if len(argsCtx) != len(function.Args) {
@@ -117,11 +117,13 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) mode
 		}
 
 		logger.Debug("Calling function, switching to closure scope")
-        v.scope = functionScope
+		v.scope = functionScope
 
 		res := v.VisitWrapped(function.Def)
 		logger.Debug("Function called, now returning to current scope")
 		v.scope = currentScope
+
+		res.SetState(model.DEFAULT)
 		return res
 	case *library.LibFunctionValue:
 		argsCtx := ctx.FunctionArgs().GetArgs()
@@ -248,6 +250,9 @@ func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) model.Wrap
 	var last model.WrappedValue = library.NewNullValue()
 	for evalCondition(v.VisitWrapped(ctx.ConditionBody())) {
 		last = v.VisitWrapped(ctx.ScopeBody())
+        if last.GetState() == model.RETURN {
+            return last
+        } 
 	}
 	return last
 }
@@ -264,6 +269,11 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) model.
 		for _, item := range items {
 			v.scope.SetVar(ctx.SYMBOL().GetText(), item)
 			last = v.VisitWrapped(ctx.ScopeBody())
+			if last.GetState() == model.RETURN {
+				logger.Debug("popping off scope with foreach variables")
+				v.scope = v.scope.ParentScope
+				return last
+			}
 		}
 
 		logger.Debug("popping off scope with foreach variables")
@@ -283,11 +293,16 @@ func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) model.WrappedV
 	var last model.WrappedValue = library.NewNullValue()
 	for evalCondition(v.VisitWrapped(ctx.GetCond())) {
 		last = v.VisitWrapped(ctx.ScopeBody())
+		if last.GetState() == model.RETURN {
+			logger.Debug("popping off scope with for variables")
+			v.scope = v.scope.ParentScope
+			return last
+		}
 		v.VisitWrapped(ctx.GetStep())
 	}
 
 	logger.Debug("popping off scope with for variables")
-	v.scope = scope.NewScope(v.scope)
+	v.scope = v.scope.ParentScope
 	return last
 }
 

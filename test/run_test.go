@@ -328,3 +328,31 @@ func TestForEachInvalid(t *testing.T) {
 
 	assertPanic(t, func() { interpreter.RunIlang(input) })
 }
+
+func TestReturnEarly(t *testing.T) {
+	input := `
+    let v = 2;
+    return v;
+    v = 5;
+    return v;
+    `
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "2")
+}
+
+func TestReturnFunction(t *testing.T) {
+	input := `
+    let test = func(num) {
+        if (num > 0) {
+            return true;
+        }
+        return false;
+    };
+
+    test(2);
+    `
+
+	res := interpreter.RunIlang(input).PrintValue()
+	assertStringEquals(t, res, "true")
+}

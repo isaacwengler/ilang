@@ -48,11 +48,17 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		curr = v.Visit(n.(antlr.ParseTree))
 		switch n.(type) {
 		case *parser.ReturnContext:
+			curr.(model.WrappedValue).SetState(model.RETURN)
 			return curr
 		default:
 			// ignore terminal nodes
 			if curr != nil {
-				val = curr
+				switch curr.(model.WrappedValue).GetState() {
+				case model.RETURN:
+					return curr
+				default:
+					val = curr
+				}
 			}
 		}
 	}

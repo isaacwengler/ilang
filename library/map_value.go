@@ -10,10 +10,19 @@ import (
 
 type MapValue struct {
 	value map[any]model.WrappedValue
+	state model.ExecutionState
 }
 
 func (s *MapValue) IsWrappedValue() bool {
 	return true
+}
+
+func (s *MapValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *MapValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *MapValue) PrintValue() string {
@@ -80,5 +89,5 @@ func (s *MapValue) SetChild(key model.WrappedValue, value model.WrappedValue) {
 }
 
 func NewMapValue(value map[any]model.WrappedValue) *MapValue {
-	return &MapValue{value}
+	return &MapValue{value, model.DEFAULT}
 }

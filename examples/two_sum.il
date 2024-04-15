@@ -1,14 +1,13 @@
 let twoSum = func(nums, target) {
     let seen = {};
-    let ans = [-1, -1];
     for (let i = 0; i < (nums.length()); i = i + 1) {
         let num = nums[i];
         if (seen[target - num] != null) {
-            ans = [seen[target - num], i];
+            return [seen[target - num], i];
         }
         seen[num] = i;
     }
-    return ans;
+    return [-1, -1];
 };
 
 let a = [];

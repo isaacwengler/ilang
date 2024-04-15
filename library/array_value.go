@@ -7,6 +7,7 @@ import (
 
 type ArrayValue struct {
 	value []model.WrappedValue
+	state model.ExecutionState
 }
 
 func (s *ArrayValue) IsWrappedValue() bool {
@@ -15,6 +16,14 @@ func (s *ArrayValue) IsWrappedValue() bool {
 
 func (s *ArrayValue) GetValue() []model.WrappedValue {
 	return s.value
+}
+
+func (s *ArrayValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *ArrayValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *ArrayValue) PrintValue() string {
@@ -72,5 +81,5 @@ func (s *ArrayValue) SetChild(key model.WrappedValue, value model.WrappedValue) 
 }
 
 func NewArrayValue(value []model.WrappedValue) *ArrayValue {
-	return &ArrayValue{value}
+	return &ArrayValue{value, model.DEFAULT}
 }

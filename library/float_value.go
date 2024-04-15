@@ -2,13 +2,14 @@ package library
 
 import (
 	"errors"
+	"ilang/model"
 	"math"
 	"strconv"
-    "ilang/model"
 )
 
 type FloatValue struct {
 	value float64
+	state model.ExecutionState
 }
 
 func (s *FloatValue) IsWrappedValue() bool {
@@ -21,6 +22,14 @@ func (s *FloatValue) PrintValue() string {
 
 func (s *FloatValue) GetValue() float64 {
 	return s.value
+}
+
+func (s *FloatValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *FloatValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *FloatValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
@@ -131,5 +140,5 @@ func (s *FloatValue) SetChild(key model.WrappedValue, value model.WrappedValue) 
 }
 
 func NewFloatValue(value float64) *FloatValue {
-	return &FloatValue{value}
+	return &FloatValue{value, model.DEFAULT}
 }

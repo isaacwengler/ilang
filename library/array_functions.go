@@ -29,6 +29,7 @@ func contains(arr *ArrayValue, args []model.WrappedValue) model.WrappedValue {
 		switch v.(type) {
 		case *FunctionValue:
 			// TODO extract function calling into function
+            // what does this mean ^?
 		default:
 			if v.Comparison("==", args[0]).(*BooleanValue).value {
 				return NewBooleanValue(true)

@@ -6,6 +6,7 @@ import (
 )
 
 type NullValue struct {
+    state model.ExecutionState
 }
 
 func (s *NullValue) IsWrappedValue() bool {
@@ -14,6 +15,14 @@ func (s *NullValue) IsWrappedValue() bool {
 
 func (s *NullValue) PrintValue() string {
 	return "null"
+}
+
+func (s *NullValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *NullValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *NullValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {

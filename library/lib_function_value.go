@@ -6,8 +6,9 @@ import (
 )
 
 type LibFunctionValue struct {
-	f    func(args []model.WrappedValue) model.WrappedValue
-	name string
+	f     func(args []model.WrappedValue) model.WrappedValue
+	name  string
+	state model.ExecutionState
 }
 
 func (s *LibFunctionValue) IsWrappedValue() bool {
@@ -16,6 +17,14 @@ func (s *LibFunctionValue) IsWrappedValue() bool {
 
 func (s *LibFunctionValue) PrintValue() string {
 	return "func " + s.name
+}
+
+func (s *LibFunctionValue) GetState() model.ExecutionState {
+	return s.state
+}
+
+func (s *LibFunctionValue) SetState(state model.ExecutionState) {
+	s.state = state
 }
 
 func (s *LibFunctionValue) Comparison(op string, other model.WrappedValue) model.WrappedValue {
@@ -41,5 +50,5 @@ func (s *LibFunctionValue) SetChild(key model.WrappedValue, value model.WrappedV
 }
 
 func NewLibFunctionValue(f func(args []model.WrappedValue) model.WrappedValue, name string) *LibFunctionValue {
-	return &LibFunctionValue{f, name}
+	return &LibFunctionValue{f, name, model.DEFAULT}
 }
