@@ -13,9 +13,9 @@ import (
 )
 
 func NewVisitor() *Visitor {
-	v := &Visitor{&antlr.BaseParseTreeVisitor{}, scope.NewScope(nil)}
+	v := &Visitor{&antlr.BaseParseTreeVisitor{}, scope.New(nil)}
 	v.registerGlobalFunctions()
-	v.scope = scope.NewScope(v.scope)
+	v.scope = scope.New(v.scope)
 	return v
 }
 
@@ -104,7 +104,7 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) mode
 		function := expr.(*library.FunctionValue)
 
 		currentScope := v.scope
-		functionScope := scope.NewScope(function.ClosureScope)
+		functionScope := scope.New(function.ClosureScope)
 
 		argsCtx := ctx.FunctionArgs().GetArgs()
 		if len(argsCtx) != len(function.Args) {
@@ -113,7 +113,7 @@ func (v *Visitor) VisitFunctionCallWrapped(ctx *parser.FunctionCallContext) mode
 		}
 
 		for i := range argsCtx {
-			functionScope.SetVar(function.Args[i], v.VisitWrapped(argsCtx[i]))
+			functionScope.Set(function.Args[i], v.VisitWrapped(argsCtx[i]))
 		}
 
 		logger.Debug("Calling function, switching to closure scope")
@@ -199,11 +199,11 @@ func (v *Visitor) VisitAssignmentWrapped(ctx *parser.AssignmentContext) model.Wr
 	variable := ctx.SYMBOL().GetText()
 	value := v.VisitWrapped(ctx.Expr())
 
-	_, isPresentInCurrentScope := v.scope.GetVar(variable)
+	_, isPresentInCurrentScope := v.scope.Get(variable)
 	if isPresentInCurrentScope {
 		panic(errors.New("variable '" + variable + "' already defined in scope"))
 	}
-	v.scope.SetVar(variable, value)
+	v.scope.Set(variable, value)
 	return value
 }
 
@@ -222,7 +222,7 @@ func (v *Visitor) VisitReassignmentWrapped(ctx *parser.ReassignmentContext) mode
 		curr = curr.SymbolChild()
 	}
 
-	v.scope.ReassignVariable(symbol, value, children)
+	v.scope.Reassign(symbol, value, children)
 	return value
 }
 
@@ -259,7 +259,7 @@ func (v *Visitor) VisitWhileLoopWrapped(ctx *parser.WhileLoopContext) model.Wrap
 
 func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) model.WrappedValue {
 	logger.Debug("pushing new scope for foreach variables")
-	v.scope = scope.NewScope(v.scope)
+	v.scope = scope.New(v.scope)
 
 	expr := v.VisitWrapped(ctx.Expr())
 	switch expr.(type) {
@@ -267,7 +267,7 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) model.
 		items := expr.(*library.ArrayValue).GetValue()
 		var last model.WrappedValue = library.NewNullValue()
 		for _, item := range items {
-			v.scope.SetVar(ctx.SYMBOL().GetText(), item)
+			v.scope.Set(ctx.SYMBOL().GetText(), item)
 			last = v.VisitWrapped(ctx.ScopeBody())
 			if last.GetState() == model.RETURN {
 				logger.Debug("popping off scope with foreach variables")
@@ -287,7 +287,7 @@ func (v *Visitor) VisitForeachLoopWrapped(ctx *parser.ForeachLoopContext) model.
 
 func (v *Visitor) VisitForLoopWrapped(ctx *parser.ForLoopContext) model.WrappedValue {
 	logger.Debug("pushing new scope for for variables")
-	v.scope = scope.NewScope(v.scope)
+	v.scope = scope.New(v.scope)
 
 	v.VisitWrapped(ctx.GetInit())
 	var last model.WrappedValue = library.NewNullValue()
@@ -320,7 +320,7 @@ func (v *Visitor) VisitElseStatementWrapped(ctx *parser.ElseStatementContext) mo
 
 func (v *Visitor) VisitScopeBodyWrapped(ctx *parser.ScopeBodyContext) model.WrappedValue {
 	logger.Debug("pushing new scope")
-	v.scope = scope.NewScope(v.scope)
+	v.scope = scope.New(v.scope)
 
 	val := v.VisitChildrenWrapped(ctx)
 
@@ -346,7 +346,7 @@ func (v *Visitor) VisitNotWrapped(ctx *parser.NotContext) model.WrappedValue {
 }
 
 func (v *Visitor) VisitSymbolWrapped(ctx *parser.SymbolContext) model.WrappedValue {
-	return v.scope.ResolveVariable(ctx.SYMBOL().GetText())
+	return v.scope.Resolve(ctx.SYMBOL().GetText())
 }
 
 func (v *Visitor) VisitStringLiteralWrapped(ctx *parser.StringLiteralContext) model.WrappedValue {

@@ -5,7 +5,7 @@ import (
     "ilang/model"
 )
 
-func NewScope(parentScope *Scope) *Scope {
+func New(parentScope *Scope) *Scope {
 	m := make(map[string]model.WrappedValue)
 	return &Scope{parentScope, &m}
 }
@@ -15,17 +15,17 @@ type Scope struct {
 	variables   *map[string]model.WrappedValue
 }
 
-func (s *Scope) SetVar(name string, val model.WrappedValue) {
+func (s *Scope) Set(name string, val model.WrappedValue) {
 	(*s.variables)[name] = val
 }
 
-func (s *Scope) GetVar(name string) (model.WrappedValue, bool) {
+func (s *Scope) Get(name string) (model.WrappedValue, bool) {
 	val, ok := (*s.variables)[name]
 	return val, ok
 }
 
-func (s *Scope) ResolveVariable(name string) model.WrappedValue {
-	val, ok := s.GetVar(name)
+func (s *Scope) Resolve(name string) model.WrappedValue {
+	val, ok := s.Get(name)
 	if ok {
 		return val
 	}
@@ -35,14 +35,14 @@ func (s *Scope) ResolveVariable(name string) model.WrappedValue {
 		panic(err)
 	}
 
-	return s.ParentScope.ResolveVariable(name)
+	return s.ParentScope.Resolve(name)
 }
 
-func (s *Scope) ReassignVariable(name string, val model.WrappedValue, children []model.WrappedValue) {
-	curr, ok := s.GetVar(name)
+func (s *Scope) Reassign(name string, val model.WrappedValue, children []model.WrappedValue) {
+	curr, ok := s.Get(name)
 	if ok {
 		if len(children) == 0 {
-			s.SetVar(name, val)
+			s.Set(name, val)
 			return
 		}
 
@@ -59,5 +59,5 @@ func (s *Scope) ReassignVariable(name string, val model.WrappedValue, children [
 		err := errors.New("Attempting to reassign undefined variable '" + name + "'")
 		panic(err)
 	}
-	s.ParentScope.ReassignVariable(name, val, children)
+	s.ParentScope.Reassign(name, val, children)
 }
